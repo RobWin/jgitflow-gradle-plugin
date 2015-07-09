@@ -33,10 +33,11 @@ buildscript {
 apply plugin: 'io.github.robwin.jgitflow'
 ----
 
-The plugin adds a the task named `releaseStart`. The task checks that the current project version is a snapshot version, e.g. `1.0.0-SNAPSHOT` and by default checks that no snapshot library dependencies are used.
+The plugin adds a task named `releaseStart`. The task checks that the current project version is a snapshot version, e.g. `1.0.0-SNAPSHOT`, and that no snapshot library dependencies are used.
 This task exposes a few properties as part of its configuration.
 
-.Properties
+.Properties of releaseStart
+[options="header"]
 |===
 |Property | Description | Type | Default
 |releaseVersion | The version of the release |  String | Empty
