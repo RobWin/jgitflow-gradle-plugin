@@ -3,6 +3,9 @@
 :version: 0.1.0
 :hardbreaks:
 
+image:https://travis-ci.org/RobWin/jgitflow-gradle-plugin.svg["Build Status", link="https://travis-ci.org/RobWin/jgitflow-gradle-plugin"]
+
+
 == Overview
 
 
