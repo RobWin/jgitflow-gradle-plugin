@@ -8,7 +8,7 @@ image:https://travis-ci.org/RobWin/jgitflow-gradle-plugin.svg["Build Status", li
 == Overview
 
 This is a JGitflow Gradle Plugin which supports the Gitflow Workflow. It uses `org.eclipse.jgit` and `com.atlassian.jgitflow:jgit-flow-core` to implement the Gitflow Workflow. The project is inspired by the http://jgitflow.bitbucket.org/[JGitFlow Maven Plugin].
-The Plugin adds the following task under the group "jgitflow":
+The Plugin adds the following tasks under a group called "jgitflow":
 
 * releaseStart: creates a release branch and updates the gradle.properties file with a release version
 * releaseFinish: merges the release branch with the master branch and develop branch
@@ -33,19 +33,38 @@ buildscript {
 apply plugin: 'io.github.robwin.jgitflow'
 ----
 
+The default Gitflow configuration looks as follows:
+
+.Branch names
+[options="header"]
+|===
+|Logical branch name | Real branch name
+|master | "master"
+|develop | "develop"
+|feature | "feature/<featureName>"
+|release | "release/<releaseVersion>"
+|hotfix | "hotfix/<hotfixName>";
+|===
+
+By default the release tag has no version prefix.
+
+=== Release Start Task
+
 The plugin adds a task named `releaseStart`. The task checks that the current project version is a snapshot version, e.g. `1.0.0-SNAPSHOT`, and that no snapshot library dependencies are used.
-This task exposes a few properties as part of its configuration.
+It creates a release branch `releases/<releaseVersion>` and updates the `gradle.properties` file with a release version.
+The task exposes a few properties as part of its configuration.
 
 .Properties of releaseStart
 [options="header"]
 |===
 |Property | Description | Type | Default
-|releaseVersion | The version of the release |  String | Empty
-|allowSnapshotDependencies| The version of the release | Boolean| False
+|releaseVersion | The version of the release |  String | empty
+|allowSnapshotDependencies| Allow snapshot library dependencies | Boolean| false
 |===
 
+==== Example
+
 The tasks should be invoked via a command line.
-Example:
 
 `gradlew releaseStart -PreleaseVersion=1.0.0`
 
