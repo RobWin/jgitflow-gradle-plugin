@@ -26,16 +26,55 @@ import org.gradle.api.Project
 class JGitflowPlugin implements Plugin<Project> {
 
     static final String RELEASE_START_TASK_NAME = 'releaseStart'
-
     static final String RELEASE_FINISH_TASK_NAME = 'releaseFinish'
+    static final String FEATURE_START_TASK_NAME = 'featureStart'
+    static final String FEATURE_FINISH_TASK_NAME = 'featureFinish'
+    static final String HOTFIX_START_TASK_NAME = 'hotfixStart'
+    static final String HOTFIX_FINISH_TASK_NAME = 'hotfixFinish'
+    static final String GROUP_NAME = 'jgitflow'
 
     @Override
     void apply(Project project) {
-        project.task(RELEASE_START_TASK_NAME, type: ReleaseStartTask, group: 'jgitflow',
+        project.task(
+                RELEASE_START_TASK_NAME,
+                type: ReleaseStartTask,
+                group: GROUP_NAME,
                 description: 'Prepares the project for a release. Creates a release branch and updates gradle with the release version.')
 
-        project.task(RELEASE_FINISH_TASK_NAME, type: ReleaseFinishTask, group: 'jgitflow',
-                description: 'Releases the project. Builds the project, Merges the release branch (as per git-flow), optionally pushes changes and updates gradle to new development version.')
+        project.task(
+                RELEASE_FINISH_TASK_NAME,
+                type: ReleaseFinishTask,
+                group: GROUP_NAME,
+                description: 'Releases the project. Merges the release branch and optionally pushes changes and updates gradle to new development version.')
+
+
+        project.task(
+                FEATURE_START_TASK_NAME,
+                type: FEATURE_START_TASK_NAME,
+                description: 'Prepares the project for a new feature. Creates a feature branch and updates gradle with the feature version.',
+                group: GROUP_NAME){
+        }
+
+        project.task(
+                FEATURE_FINISH_TASK_NAME,
+                type: FEATURE_FINISH_TASK_NAME,
+                description: 'Finishes the feature. Merges the feature branch and updates gradle to previous develop version.',
+                group: GROUP_NAME){
+        }
+
+        project.task(
+                HOTFIX_START_TASK_NAME,
+                type: HOTFIX_START_TASK_NAME,
+                description: 'Prepares the project for a hotfix. Creates a hotfix branch and updates gradle with the hotfix version.',
+                group: GROUP_NAME){
+        }
+
+        project.task(
+                HOTFIX_FINISH_TASK_NAME,
+                type: HOTFIX_FINISH_TASK_NAME,
+                description: 'Releases the project. Merges the hotfix branch and optionally pushes changes and updates gradle to previous version.',
+                group: GROUP_NAME) {
+        }
     }
 
 }
