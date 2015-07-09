@@ -7,7 +7,7 @@ image:https://travis-ci.org/RobWin/jgitflow-gradle-plugin.svg["Build Status", li
 
 == Overview
 
-This is a JGitflow Gradle Plugin which supports the Gitflow Workflow. It uses `org.eclipse.jgit` and `com.atlassian.jgitflow:jgit-flow-core` to implement the Gitflow Workflow. The project is inspired by the http://jgitflow.bitbucket.org/[JGitFlow Maven Plugin].
+This is a Gradle Plugin which adds tasks to Gradle to support the https://de.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow/[Gitflow Workflow]. The Gitflow Workflow provides a robust framework for managing larger projects. The Plugin uses `org.eclipse.jgit` and `com.atlassian.jgitflow:jgit-flow-core` to implement the Gitflow Workflow. The project is inspired by the http://jgitflow.bitbucket.org/[JGitFlow Maven Plugin].
 The Plugin adds the following tasks under a group called "jgitflow":
 
 * releaseStart: Creates a release branch and updates the gradle.properties file with a release version
