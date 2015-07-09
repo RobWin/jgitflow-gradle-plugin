@@ -18,7 +18,21 @@
  */
 package io.github.robwin.jgitflow.tasks
 
+import com.atlassian.jgitflow.core.InitContext
+import com.atlassian.jgitflow.core.JGitFlow
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.TaskAction
 
 class FeatureFinishTask extends DefaultTask {
+
+    @Input
+    String featureName;
+
+    @TaskAction
+    void finish(){
+        InitContext initContext = new InitContext()
+        JGitFlow flow = JGitFlow.getOrInit(project.rootProject.rootDir, initContext)
+        flow.featureFinish(featureName).setPush(true).call();
+    }
 }

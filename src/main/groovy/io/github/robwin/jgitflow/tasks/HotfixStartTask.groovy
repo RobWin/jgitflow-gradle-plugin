@@ -18,7 +18,21 @@
  */
 package io.github.robwin.jgitflow.tasks
 
+import com.atlassian.jgitflow.core.InitContext
+import com.atlassian.jgitflow.core.JGitFlow
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.TaskAction
 
 class HotfixStartTask extends DefaultTask {
+
+    @Input
+    String hotfixName;
+
+    @TaskAction
+    void start(){
+        InitContext initContext = new InitContext()
+        JGitFlow flow = JGitFlow.getOrInit(project.rootProject.rootDir, initContext)
+        flow.hotfixFinish(hotfixName).call();
+    }
 }

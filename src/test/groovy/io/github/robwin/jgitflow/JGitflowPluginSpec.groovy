@@ -18,6 +18,10 @@
  */
 package io.github.robwin.jgitflow
 
+import io.github.robwin.jgitflow.tasks.FeatureFinishTask
+import io.github.robwin.jgitflow.tasks.FeatureStartTask
+import io.github.robwin.jgitflow.tasks.HotfixFinishTask
+import io.github.robwin.jgitflow.tasks.HotfixStartTask
 import io.github.robwin.jgitflow.tasks.ReleaseFinishTask
 import io.github.robwin.jgitflow.tasks.ReleaseStartTask
 import org.gradle.api.Project
@@ -41,9 +45,21 @@ class JGitflowPluginSpec extends Specification{
         then:
             ReleaseStartTask releaseStartTask = (ReleaseStartTask) project.tasks.findByName(JGitflowPlugin.RELEASE_START_TASK_NAME)
             releaseStartTask != null
-            releaseStartTask.group == 'jgitflow'
+            releaseStartTask.group == JGitflowPlugin.GROUP_NAME
             ReleaseFinishTask releaseFinishTask = (ReleaseFinishTask) project.tasks.findByName(JGitflowPlugin.RELEASE_FINISH_TASK_NAME)
             releaseFinishTask != null
-            releaseFinishTask.group == 'jgitflow'
+            releaseFinishTask.group == JGitflowPlugin.GROUP_NAME
+            FeatureStartTask featureStartTask = (FeatureStartTask) project.tasks.findByName(JGitflowPlugin.FEATURE_START_TASK_NAME)
+            featureStartTask != null
+            featureStartTask.group == JGitflowPlugin.GROUP_NAME
+            FeatureFinishTask featureFinishTask = (FeatureFinishTask) project.tasks.findByName(JGitflowPlugin.FEATURE_FINISH_TASK_NAME)
+            featureFinishTask != null
+            featureFinishTask.group == JGitflowPlugin.GROUP_NAME
+            HotfixStartTask hotfixStartTask = (HotfixStartTask) project.tasks.findByName(JGitflowPlugin.HOTFIX_START_TASK_NAME)
+            hotfixStartTask != null
+            hotfixStartTask.group == JGitflowPlugin.GROUP_NAME
+            HotfixFinishTask hotfixFinishTask = (HotfixFinishTask) project.tasks.findByName(JGitflowPlugin.HOTFIX_FINISH_TASK_NAME)
+            hotfixFinishTask != null
+            hotfixFinishTask.group == JGitflowPlugin.GROUP_NAME
     }
 }
