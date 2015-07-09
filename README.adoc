@@ -76,7 +76,7 @@ The plugin adds a task named `releaseFinish`. The task merges the release branch
 
 The tasks should be invoked via a command line.
 
-`gradlew releaseFinish
+`gradlew releaseFinish`
 
 == License
 
