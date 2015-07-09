@@ -18,5 +18,7 @@
  */
 package io.github.robwin.jgitflow.tasks
 
-class FeatureStartTask {
+import org.gradle.api.DefaultTask
+
+class FeatureStartTask extends DefaultTask {
 }

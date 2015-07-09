@@ -18,5 +18,7 @@
  */
 package io.github.robwin.jgitflow.tasks
 
-class HotfixStartTask {
+import org.gradle.api.DefaultTask
+
+class HotfixStartTask extends DefaultTask {
 }

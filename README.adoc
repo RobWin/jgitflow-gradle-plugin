@@ -13,6 +13,8 @@ The Plugin adds the following tasks under a group called "jgitflow":
 * releaseStart: Creates a release branch and updates the gradle.properties file with a release version
 * releaseFinish: Merges the release branch into the master branch and develop branch
 
+The project requires at least JDK 7.
+
 == Usage Guide
 
 Add the following snippet to your Gradle build file:

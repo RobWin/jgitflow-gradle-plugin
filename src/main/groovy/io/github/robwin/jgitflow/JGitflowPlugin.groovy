@@ -18,6 +18,10 @@
  */
 package io.github.robwin.jgitflow
 
+import io.github.robwin.jgitflow.tasks.FeatureFinishTask
+import io.github.robwin.jgitflow.tasks.FeatureStartTask
+import io.github.robwin.jgitflow.tasks.HotfixFinishTask
+import io.github.robwin.jgitflow.tasks.HotfixStartTask
 import io.github.robwin.jgitflow.tasks.ReleaseFinishTask
 import io.github.robwin.jgitflow.tasks.ReleaseStartTask
 import org.gradle.api.Plugin
@@ -50,28 +54,28 @@ class JGitflowPlugin implements Plugin<Project> {
 
         project.task(
                 FEATURE_START_TASK_NAME,
-                type: FEATURE_START_TASK_NAME,
+                type: FeatureStartTask,
                 description: 'Prepares the project for a new feature. Creates a feature branch and updates gradle with the feature version.',
                 group: GROUP_NAME){
         }
 
         project.task(
                 FEATURE_FINISH_TASK_NAME,
-                type: FEATURE_FINISH_TASK_NAME,
+                type: FeatureFinishTask,
                 description: 'Finishes the feature. Merges the feature branch and updates gradle to previous develop version.',
                 group: GROUP_NAME){
         }
 
         project.task(
                 HOTFIX_START_TASK_NAME,
-                type: HOTFIX_START_TASK_NAME,
+                type: HotfixStartTask,
                 description: 'Prepares the project for a hotfix. Creates a hotfix branch and updates gradle with the hotfix version.',
                 group: GROUP_NAME){
         }
 
         project.task(
                 HOTFIX_FINISH_TASK_NAME,
-                type: HOTFIX_FINISH_TASK_NAME,
+                type: HotfixFinishTask,
                 description: 'Releases the project. Merges the hotfix branch and optionally pushes changes and updates gradle to previous version.',
                 group: GROUP_NAME) {
         }

@@ -18,5 +18,7 @@
  */
 package io.github.robwin.jgitflow.tasks
 
-class FeatureFinishTask {
+import org.gradle.api.DefaultTask
+
+class FeatureFinishTask extends DefaultTask {
 }

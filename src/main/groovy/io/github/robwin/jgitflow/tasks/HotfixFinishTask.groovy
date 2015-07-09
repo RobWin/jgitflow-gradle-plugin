@@ -18,5 +18,7 @@
  */
 package io.github.robwin.jgitflow.tasks
 
-class HotfixFinishTask {
+import org.gradle.api.DefaultTask
+
+class HotfixFinishTask extends DefaultTask {
 }
