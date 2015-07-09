@@ -10,10 +10,10 @@ image:https://travis-ci.org/RobWin/jgitflow-gradle-plugin.svg["Build Status", li
 This is a JGitflow Gradle Plugin which supports the Gitflow Workflow. It uses `org.eclipse.jgit` and `com.atlassian.jgitflow:jgit-flow-core` to implement the Gitflow Workflow. The project is inspired by the http://jgitflow.bitbucket.org/[JGitFlow Maven Plugin].
 The Plugin adds the following tasks under a group called "jgitflow":
 
-* releaseStart: creates a release branch and updates the gradle.properties file with a release version
-* releaseFinish: merges the release branch with the master branch and develop branch
+* releaseStart: Creates a release branch and updates the gradle.properties file with a release version
+* releaseFinish: Merges the release branch into the master branch and develop branch
 
-== Usage guide
+== Usage Guide
 
 Add the following snippet to your Gradle build file:
 
@@ -67,6 +67,16 @@ The task exposes a few properties as part of its configuration.
 The tasks should be invoked via a command line.
 
 `gradlew releaseStart -PreleaseVersion=1.0.0`
+
+=== Release Finish Task
+
+The plugin adds a task named `releaseFinish`. The task merges the release branch into the master branch and develop branch.
+
+==== Example
+
+The tasks should be invoked via a command line.
+
+`gradlew releaseFinish
 
 == License
 
