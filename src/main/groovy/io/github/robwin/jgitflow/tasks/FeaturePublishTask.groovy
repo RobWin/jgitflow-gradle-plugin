@@ -30,7 +30,7 @@ class FeaturePublishTask extends DefaultTask {
     String featureName;
 
     @TaskAction
-    void finish(){
+    void publish(){
         InitContext initContext = new InitContext()
         JGitFlow flow = JGitFlow.getOrInit(project.rootProject.rootDir, initContext)
         flow.featurePublish(featureName).setPush(true).call();

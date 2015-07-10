@@ -22,6 +22,7 @@ import com.atlassian.jgitflow.core.InitContext
 import com.atlassian.jgitflow.core.JGitFlow
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 
 class HotfixStartTask extends DefaultTask {
@@ -29,10 +30,20 @@ class HotfixStartTask extends DefaultTask {
     @Input
     String hotfixName;
 
+    @Input
+    @Optional
+    String baseCommit;
+
     @TaskAction
     void start(){
         InitContext initContext = new InitContext()
         JGitFlow flow = JGitFlow.getOrInit(project.rootProject.rootDir, initContext)
-        flow.hotfixFinish(hotfixName).call();
+
+        //Start a hotfix
+        def command = flow.hotfixStart(hotfixName)
+        if (baseCommit) {
+            command.setStartCommit(baseCommit)
+        }
+        command.call()
     }
 }

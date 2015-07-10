@@ -17,14 +17,11 @@
  *
  */
 package io.github.robwin.jgitflow.tasks
-
 import com.atlassian.jgitflow.core.InitContext
 import com.atlassian.jgitflow.core.JGitFlow
-import com.atlassian.jgitflow.core.exception.ReleaseBranchExistsException
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.Status
 import org.eclipse.jgit.api.errors.GitAPIException
-import org.eclipse.jgit.lib.Ref
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Project
@@ -64,7 +61,11 @@ class ReleaseStartTask extends DefaultTask {
         }
 
         //Start a release
-        Ref releaseBranch = startRelease(flow)
+        def command = flow.releaseStart(releaseVersion)
+        if (baseCommit) {
+            command.setStartCommit(baseCommit)
+        }
+        command.call()
 
         //Local working copy is now on release branch
 
@@ -73,20 +74,6 @@ class ReleaseStartTask extends DefaultTask {
 
         //Commit the release version
         commitGradlePropertiesFile(flow.git(), "[JGitFlow Gradle Plugin] Updated gradle.properties for v" + releaseVersion + " release")
-    }
-
-    private Ref startRelease(JGitFlow flow) {
-        try {
-            def command = flow.releaseStart(releaseVersion)
-            if (baseCommit) {
-                command.setStartCommit(baseCommit)
-            }
-            return command.call()
-        }
-        catch (ReleaseBranchExistsException e) {
-            //the release branch already exists, just check it out
-            return flow.git().checkout().setName(flow.getReleaseBranchPrefix() + releaseVersion).call()
-        }
     }
 
     private void validateReleaseVersion() {

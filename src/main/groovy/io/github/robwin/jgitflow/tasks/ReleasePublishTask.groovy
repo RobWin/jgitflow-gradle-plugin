@@ -30,7 +30,7 @@ class ReleasePublishTask extends DefaultTask {
     String releaseVersion;
 
     @TaskAction
-    void finish(){
+    void publish(){
         InitContext initContext = new InitContext()
         JGitFlow flow = JGitFlow.getOrInit(project.rootProject.rootDir, initContext)
         flow.releasePublish(releaseVersion).call();

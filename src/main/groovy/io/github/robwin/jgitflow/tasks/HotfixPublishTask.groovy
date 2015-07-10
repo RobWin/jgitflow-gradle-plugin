@@ -30,7 +30,7 @@ class HotfixPublishTask extends DefaultTask {
     String hotfixName;
 
     @TaskAction
-    void start(){
+    void publish(){
         InitContext initContext = new InitContext()
         JGitFlow flow = JGitFlow.getOrInit(project.rootProject.rootDir, initContext)
         flow.hotfixPublish(hotfixName).call();
