@@ -42,7 +42,6 @@ class ReleaseStartTask extends DefaultTask {
         //Make sure that the develop branch is used
         flow.git().checkout().setName(flow.getDevelopBranchName()).call()
 
-
         String allowSnapshotDependencies = project.hasProperty('allowSnapshotDependencies') ? project.property('allowSnapshotDependencies') : false
 
         if (!allowSnapshotDependencies) {
