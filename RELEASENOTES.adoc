@@ -2,3 +2,7 @@
 
 == Version 0.1.0
 * Initial version
+
+== Version 0.2.0
+* Updated jgit-flow-core version from 0.21 to 1.0-m5.1
+* Added tasks for features and hotfixes

@@ -19,10 +19,13 @@
 package io.github.robwin.jgitflow
 
 import io.github.robwin.jgitflow.tasks.FeatureFinishTask
+import io.github.robwin.jgitflow.tasks.FeaturePublishTask
 import io.github.robwin.jgitflow.tasks.FeatureStartTask
 import io.github.robwin.jgitflow.tasks.HotfixFinishTask
+import io.github.robwin.jgitflow.tasks.HotfixPublishTask
 import io.github.robwin.jgitflow.tasks.HotfixStartTask
 import io.github.robwin.jgitflow.tasks.ReleaseFinishTask
+import io.github.robwin.jgitflow.tasks.ReleasePublishTask
 import io.github.robwin.jgitflow.tasks.ReleaseStartTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -31,10 +34,13 @@ class JGitflowPlugin implements Plugin<Project> {
 
     static final String RELEASE_START_TASK_NAME = 'releaseStart'
     static final String RELEASE_FINISH_TASK_NAME = 'releaseFinish'
+    static final String RELEASE_PUBLISH_TASK_NAME = 'releasePublish'
     static final String FEATURE_START_TASK_NAME = 'featureStart'
     static final String FEATURE_FINISH_TASK_NAME = 'featureFinish'
+    static final String FEATURE_PUBLISH_TASK_NAME = 'featurePublish'
     static final String HOTFIX_START_TASK_NAME = 'hotfixStart'
     static final String HOTFIX_FINISH_TASK_NAME = 'hotfixFinish'
+    static final String HOTFIX_PUBLISH_TASK_NAME = 'hotfixPublish'
     static final String GROUP_NAME = 'jgitflow'
 
     @Override
@@ -43,42 +49,59 @@ class JGitflowPlugin implements Plugin<Project> {
                 RELEASE_START_TASK_NAME,
                 type: ReleaseStartTask,
                 group: GROUP_NAME,
-                description: 'Prepares the project for a release. Creates a release branch and updates gradle with the release version.')
+                description: 'Creates a release branch and updates gradle with the release version.')
 
         project.task(
                 RELEASE_FINISH_TASK_NAME,
                 type: ReleaseFinishTask,
                 group: GROUP_NAME,
-                description: 'Releases the project. Merges the release branch and optionally pushes changes and updates gradle to new development version.')
+                description: 'Merges a release branch back into the master branch and develop branch and pushes everything to the remote origin.')
 
+        project.task(
+                RELEASE_PUBLISH_TASK_NAME,
+                type: ReleasePublishTask,
+                group: GROUP_NAME,
+                description: 'Publishes a release branch to the remote origin.')
 
         project.task(
                 FEATURE_START_TASK_NAME,
                 type: FeatureStartTask,
-                description: 'Prepares the project for a new feature. Creates a feature branch and updates gradle with the feature version.',
+                description: 'Creates a feature branch.',
                 group: GROUP_NAME){
         }
 
         project.task(
                 FEATURE_FINISH_TASK_NAME,
                 type: FeatureFinishTask,
-                description: 'Finishes the feature. Merges the feature branch and updates gradle to previous develop version.',
+                description: 'Merges a feature branch back into the develop branch.',
                 group: GROUP_NAME){
         }
 
         project.task(
+                FEATURE_PUBLISH_TASK_NAME,
+                type: FeaturePublishTask,
+                group: GROUP_NAME,
+                description: 'Publishes a feature branch to the remote origin.')
+
+        project.task(
                 HOTFIX_START_TASK_NAME,
                 type: HotfixStartTask,
-                description: 'Prepares the project for a hotfix. Creates a hotfix branch and updates gradle with the hotfix version.',
+                description: 'Creates a hotfix branch.',
                 group: GROUP_NAME){
         }
 
         project.task(
                 HOTFIX_FINISH_TASK_NAME,
                 type: HotfixFinishTask,
-                description: 'Releases the project. Merges the hotfix branch and optionally pushes changes and updates gradle to previous version.',
+                description: ' Merges a hotfix branch back into the master branch and develop branch.',
                 group: GROUP_NAME) {
         }
+
+        project.task(
+                HOTFIX_PUBLISH_TASK_NAME,
+                type: HotfixPublishTask,
+                group: GROUP_NAME,
+                description: 'Publishes a hotfix branch to the remote origin.')
     }
 
 }

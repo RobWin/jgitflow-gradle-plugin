@@ -33,6 +33,6 @@ class HotfixFinishTask extends DefaultTask {
     void finish(){
         InitContext initContext = new InitContext()
         JGitFlow flow = JGitFlow.getOrInit(project.rootProject.rootDir, initContext)
-        flow.hotfixFinish(hotfixName).setPush(true).call();
+        flow.hotfixFinish(hotfixName).call();
     }
 }

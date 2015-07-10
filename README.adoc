@@ -1,17 +1,24 @@
 = JGitflow Gradle Plugin
 :author: Robert Winkler
-:version: 0.1.0
+:version: 0.2.0
 :hardbreaks:
 
 image:https://travis-ci.org/RobWin/jgitflow-gradle-plugin.svg["Build Status", link="https://travis-ci.org/RobWin/jgitflow-gradle-plugin"] image:https://coveralls.io/repos/RobWin/jgitflow-gradle-plugin/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/jgitflow-gradle-plugin"] image:https://api.bintray.com/packages/robwin/maven/jgitflow-gradle-plugin/images/download.svg[link="https://bintray.com/robwin/maven/jgitflow-gradle-plugin/_latestVersion"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"] image:https://img.shields.io/badge/Twitter-rbrtwnklr-blue.svg["Twitter", link="https://twitter.com/rbrtwnklr"] image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/RobWin/jgitflow-gradle-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"]
 
 == Overview
 
-This is a Gradle Plugin which adds tasks to Gradle to support the https://de.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow/[Gitflow Workflow]. The Gitflow Workflow provides a robust framework for managing larger projects. The Plugin uses `org.eclipse.jgit` and `com.atlassian.jgitflow:jgit-flow-core` to implement the Gitflow Workflow. The project is inspired by the http://jgitflow.bitbucket.org/[JGitFlow Maven Plugin].
-The Plugin adds the following tasks under a group called "jgitflow":
+This is a Gradle Plugin which adds tasks to Gradle to support the https://de.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow/[Gitflow Workflow]. The Gitflow Workflow provides a robust framework for managing larger projects. The Plugin uses `org.eclipse.jgit` and `external.atlassian.jgitflow:jgit-flow-core` to implement the Gitflow Workflow. The project is inspired by the http://jgitflow.bitbucket.org/[JGitFlow Maven Plugin].
+The Plugin adds a task group `jgitflow` which contains the following tasks:
 
-* releaseStart: Creates a release branch and updates the gradle.properties file with a release version
-* releaseFinish: Merges the release branch into the master branch and develop branch
+* `releaseStart`: Creates a release branch `release/<releaseVersion>` and updates the gradle.properties file with a release version.
+* `releaseFinish`: Merges a release branch back into the master branch and develop branch and pushes everything to the remote origin.
+* `releasePublish`: Publishes a release branch to the remote origin.
+* `featureStart`: Creates a feature branch `feature/<featureName>`.
+* `featureFinish`: Merges a feature branch back into the develop branch.
+* `featurePublish`: Publishes a feature branch to the remote origin.
+* `hotfixStart`: Creates a hotfix branch `hotfix/<hotfixName>`.
+* `hotfixFinish`: Merges a hotfix branch back into the master branch and develop branch.
+* `hotfixPublish`: Publishes a hotfix branch to the remote origin.
 
 The project requires at least JDK 7.
 
@@ -35,7 +42,7 @@ buildscript {
 apply plugin: 'io.github.robwin.jgitflow'
 ----
 
-The default Gitflow configuration looks as follows:
+The default `jgitflow` configuration looks as follows:
 
 .Branch names
 [options="header"]
@@ -48,20 +55,20 @@ The default Gitflow configuration looks as follows:
 |hotfix | "hotfix/<hotfixName>";
 |===
 
-By default the release tag has no version prefix.
+By default a release tag has no version prefix.
 
 === Release Start Task
 
-The plugin adds a task named `releaseStart`. The task checks that the current project version is a snapshot version, e.g. `1.0.0-SNAPSHOT`, and that no snapshot library dependencies are used.
-It creates a release branch `releases/<releaseVersion>` and updates the `gradle.properties` file with a release version.
+The task `releaseStart` checks that no snapshot library dependencies are used. It creates a release branch `release/<releaseVersion>` and updates the `gradle.properties` file with a release version.
 The task exposes a few properties as part of its configuration.
 
 .Properties of releaseStart
 [options="header"]
 |===
-|Property | Description | Type | Default
-|releaseVersion | The version of the release |  String | empty
-|allowSnapshotDependencies| Allow snapshot library dependencies | Boolean| false
+|Mandatory |Property | Description | Type | Default
+|Yes |releaseVersion | The version of the release |  String | empty
+|No |allowSnapshotDependencies| Allow snapshot library dependencies | Boolean| false
+|No |baseCommit| You can optionally supply a base commit sha-1 hash to start the release from. The commit must be on the develop branch. | String| empty
 |===
 
 ==== Example
@@ -72,13 +79,13 @@ The tasks should be invoked via a command line.
 
 === Release Finish Task
 
-The plugin adds a task named `releaseFinish`. The task merges the release branch into the master branch and develop branch.
+The task `releaseFinish` merges the release branch into the master branch and develop branch.
 
 ==== Example
 
 The tasks should be invoked via a command line.
 
-`gradlew releaseFinish`
+`gradlew releaseFinish -PreleaseVersion=1.0.0`
 
 == License
 

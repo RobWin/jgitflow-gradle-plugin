@@ -58,9 +58,6 @@ class ReleaseStartTask extends DefaultTask {
         //Make sure that the develop branch is used
         flow.git().checkout().setName(flow.getDevelopBranchName()).call()
 
-        //Check that all modules of the project are snapshots
-        checkThatCurrentVersionIsASnapshot()
-
         if(!allowSnapshotDependencies){
             //Check that no library dependency is a snapshot
             checkThatNoDependencyIsASnapshot()
@@ -72,7 +69,7 @@ class ReleaseStartTask extends DefaultTask {
         //Local working copy is now on release branch
 
         //Update the release version
-        updateProjectVersion(releaseVersion)
+        updateGradlePropertiesFile(releaseVersion)
 
         //Commit the release version
         commitGradlePropertiesFile(flow.git(), "[JGitFlow Gradle Plugin] Updated gradle.properties for v" + releaseVersion + " release")
@@ -117,22 +114,14 @@ class ReleaseStartTask extends DefaultTask {
         }
     }
 
-
-    private void checkThatCurrentVersionIsASnapshot() {
-        if(!ArtifactUtils.isSnapshot(project.version)) {
-            throw new GradleException("Current project version must be a snapshot: ${project.version}");
-        }
-    }
-
-
-    private void updateProjectVersion(String releaseVersion)
+    private void updateGradlePropertiesFile(String releaseVersion)
     {
-        String oldVersion = project.version
+        String currentVersion = project.version
         File propertiesFile = project.file(Project.GRADLE_PROPERTIES)
         if (!propertiesFile.file) {
             propertiesFile.append("version=${releaseVersion}")
         }else {
-            project.ant.replace(file: propertiesFile, token: "version=${oldVersion}", value: "version=${releaseVersion}", failOnNoReplacements: true)
+            project.ant.replace(file: propertiesFile, token: "version=${currentVersion}", value: "version=${releaseVersion}", failOnNoReplacements: true)
         }
     }
 

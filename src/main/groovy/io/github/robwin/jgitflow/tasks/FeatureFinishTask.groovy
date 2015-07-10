@@ -33,6 +33,6 @@ class FeatureFinishTask extends DefaultTask {
     void finish(){
         InitContext initContext = new InitContext()
         JGitFlow flow = JGitFlow.getOrInit(project.rootProject.rootDir, initContext)
-        flow.featureFinish(featureName).setPush(true).call();
+        flow.featureFinish(featureName).call();
     }
 }

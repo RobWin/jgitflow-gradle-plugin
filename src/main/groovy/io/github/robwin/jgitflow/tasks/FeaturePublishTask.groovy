@@ -24,20 +24,15 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
-class ReleaseFinishTask extends DefaultTask {
+class FeaturePublishTask extends DefaultTask {
 
     @Input
-    String releaseVersion;
-
-    @Input
-    String newVersion;
+    String featureName;
 
     @TaskAction
     void finish(){
         InitContext initContext = new InitContext()
         JGitFlow flow = JGitFlow.getOrInit(project.rootProject.rootDir, initContext)
-        flow.releaseFinish(releaseVersion).setPush(true).call();
-
-        //Local working copy is now on develop branch
+        flow.featurePublish(featureName).setPush(true).call();
     }
 }
