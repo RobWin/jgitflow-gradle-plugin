@@ -25,7 +25,7 @@ class FeatureStartTask extends DefaultTask {
 
     @TaskAction
     void start(){
-        def featureName = project.property('featureName')
+        String featureName = project.property('featureName')
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
         flow.featureStart(featureName).call();
     }

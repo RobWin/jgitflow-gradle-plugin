@@ -34,9 +34,6 @@ import org.gradle.mvn3.org.apache.maven.artifact.ArtifactUtils
 class ReleaseStartTask extends DefaultTask {
 
     @Input
-    String releaseVersion;
-
-    @Input
     @Optional
     String baseCommit;
 
@@ -47,7 +44,9 @@ class ReleaseStartTask extends DefaultTask {
     @TaskAction
     void start(){
 
-        validateReleaseVersion()
+        String releaseVersion = project.property('releaseVersion')
+
+        validateReleaseVersion(releaseVersion)
 
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
 
@@ -61,7 +60,8 @@ class ReleaseStartTask extends DefaultTask {
 
         //Start a release
         def command = flow.releaseStart(releaseVersion)
-        if (baseCommit) {
+        if (project.hasProperty('baseCommit')) {
+            String baseCommit = project.property('baseCommit')
             command.setStartCommit(baseCommit)
         }
         command.call()
@@ -75,7 +75,7 @@ class ReleaseStartTask extends DefaultTask {
         commitGradlePropertiesFile(flow.git(), "[JGitFlow Gradle Plugin] Updated gradle.properties for v" + releaseVersion + " release")
     }
 
-    private void validateReleaseVersion() {
+    private void validateReleaseVersion(String releaseVersion) {
         if(project.version == releaseVersion){
             throw new GradleException("Release version '${releaseVersion}' and current version '${project.version}' must not be equal.")
         }

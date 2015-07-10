@@ -17,29 +17,21 @@
  *
  */
 package io.github.robwin.jgitflow.tasks
-
 import com.atlassian.jgitflow.core.JGitFlow
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 
 class HotfixStartTask extends DefaultTask {
 
-    @Input
-    String hotfixName;
-
-    @Input
-    @Optional
-    String baseCommit;
-
     @TaskAction
     void start(){
+        String hotfixName = project.property('hotfixName')
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
 
         //Start a hotfix
         def command = flow.hotfixStart(hotfixName)
-        if (baseCommit) {
+        if (project.hasProperty('baseCommit')) {
+            String baseCommit = project.property('baseCommit')
             command.setStartCommit(baseCommit)
         }
         command.call()

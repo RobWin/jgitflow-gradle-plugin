@@ -25,7 +25,7 @@ class FeatureFinishTask extends DefaultTask {
 
     @TaskAction
     void finish(){
-        def featureName = project.property('featureName')
+        String featureName = project.property('featureName')
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
         flow.featureFinish(featureName).call();
     }

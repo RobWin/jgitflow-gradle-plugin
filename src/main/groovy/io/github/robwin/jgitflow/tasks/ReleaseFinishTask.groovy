@@ -17,22 +17,15 @@
  *
  */
 package io.github.robwin.jgitflow.tasks
-
 import com.atlassian.jgitflow.core.JGitFlow
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
 class ReleaseFinishTask extends DefaultTask {
 
-    @Input
-    String releaseVersion;
-
-    @Input
-    String newVersion;
-
     @TaskAction
     void finish(){
+        String releaseVersion = project.property('releaseVersion')
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
         flow.releaseFinish(releaseVersion).setPush(true).call();
 
