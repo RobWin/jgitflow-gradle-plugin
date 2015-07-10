@@ -79,13 +79,19 @@ initJGitflow{
 
 === Git authentication
 
-If you want to push changes to a remote origin, you must specify your username and password in a `~/.gradle/gradle.properties` file.
+If you want to push changes to a remote origin, you must specify your username and password in a `~/.gradle/gradle.properties` file or as a command line parameter.
 SSH is not supported yet.
+
+==== Example
 
 ----
 gitUsername=<username>
 gitPassword=<password>
 ----
+
+or 
+
+`-PgitUsername=<username> -PgitPassword=<password>`
 
 === Release Start Task
 
