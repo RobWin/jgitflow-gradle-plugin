@@ -18,7 +18,10 @@
  */
 package io.github.robwin.jgitflow.tasks
 import com.atlassian.jgitflow.core.JGitFlow
+import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
+import org.eclipse.jgit.api.MergeResult
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 
 class FeatureFinishTask extends DefaultTask {
@@ -26,7 +29,14 @@ class FeatureFinishTask extends DefaultTask {
     @TaskAction
     void finish(){
         String featureName = project.property('featureName')
+        CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
-        flow.featureFinish(featureName).call();
+        MergeResult mergeResult = flow.featureFinish(featureName).call();
+        if (!mergeResult.getMergeStatus().isSuccessful())
+        {
+            getLogger().error("Error merging into " + flow.getDevelopBranchName() + ":");
+            getLogger().error(mergeResult.toString());
+            throw new GradleException("Error while merging feature!");
+        }
     }
 }

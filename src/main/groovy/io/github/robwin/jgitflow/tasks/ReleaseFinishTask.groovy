@@ -18,7 +18,10 @@
  */
 package io.github.robwin.jgitflow.tasks
 import com.atlassian.jgitflow.core.JGitFlow
+import com.atlassian.jgitflow.core.ReleaseMergeResult
+import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 
 class ReleaseFinishTask extends DefaultTask {
@@ -26,9 +29,24 @@ class ReleaseFinishTask extends DefaultTask {
     @TaskAction
     void finish(){
         String releaseVersion = project.property('releaseVersion')
+        CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
-        flow.releaseFinish(releaseVersion).setPush(true).call();
+        ReleaseMergeResult mergeResult = flow.releaseFinish(releaseVersion).setPush(true).call();
+        if (!mergeResult.wasSuccessful())
+        {
+            if (mergeResult.masterHasProblems())
+            {
+                logger.error("Error merging into " + flow.getMasterBranchName() + ":");
+                logger.error(mergeResult.getMasterResult().toString());
+            }
 
+            if (mergeResult.developHasProblems())
+            {
+                logger.error("Error merging into " + flow.getDevelopBranchName() + ":");
+                logger.error(mergeResult.getDevelopResult().toString());
+            }
+            throw new GradleException("Error while merging release!");
+        }
         //Local working copy is now on develop branch
     }
 }
