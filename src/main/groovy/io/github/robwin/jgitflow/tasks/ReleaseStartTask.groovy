@@ -17,7 +17,6 @@
  *
  */
 package io.github.robwin.jgitflow.tasks
-import com.atlassian.jgitflow.core.InitContext
 import com.atlassian.jgitflow.core.JGitFlow
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.Status
@@ -26,43 +25,34 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.mvn3.org.apache.maven.artifact.ArtifactUtils
 
 class ReleaseStartTask extends DefaultTask {
 
-    @Input
-    String releaseVersion;
-
-    @Input
-    @Optional
-    String baseCommit;
-
-    @Input
-    @Optional
-    boolean allowSnapshotDependencies
-
     @TaskAction
     void start(){
 
-        validateReleaseVersion()
+        String releaseVersion = project.property('releaseVersion')
 
-        InitContext initContext = new InitContext()
-        JGitFlow flow = JGitFlow.getOrInit(project.rootProject.rootDir, initContext)
+        validateReleaseVersion(releaseVersion)
+
+        JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
 
         //Make sure that the develop branch is used
         flow.git().checkout().setName(flow.getDevelopBranchName()).call()
 
-        if(!allowSnapshotDependencies){
+        String allowSnapshotDependencies = project.hasProperty('allowSnapshotDependencies') ? project.property('allowSnapshotDependencies') : false
+
+        if (!allowSnapshotDependencies) {
             //Check that no library dependency is a snapshot
             checkThatNoDependencyIsASnapshot()
         }
 
         //Start a release
         def command = flow.releaseStart(releaseVersion)
-        if (baseCommit) {
+        if (project.hasProperty('baseCommit')) {
+            String baseCommit = project.property('baseCommit')
             command.setStartCommit(baseCommit)
         }
         command.call()
@@ -76,7 +66,7 @@ class ReleaseStartTask extends DefaultTask {
         commitGradlePropertiesFile(flow.git(), "[JGitFlow Gradle Plugin] Updated gradle.properties for v" + releaseVersion + " release")
     }
 
-    private void validateReleaseVersion() {
+    private void validateReleaseVersion(String releaseVersion) {
         if(project.version == releaseVersion){
             throw new GradleException("Release version '${releaseVersion}' and current version '${project.version}' must not be equal.")
         }

@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        mavenLocal()
         jcenter()
         maven {
             url "https://plugins.gradle.org/m2/"
@@ -8,11 +9,11 @@ buildscript {
     dependencies {
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
+        classpath 'io.github.robwin:jgitflow-gradle-plugin:0.2.0'
     }
 }
 
 group = 'io.github.robwin'
-version = '0.2.0'
 description = 'A JGitflow Gradle Plugin.'
 
 apply plugin: 'groovy'
@@ -21,8 +22,7 @@ apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.jfrog.bintray'
 apply from: 'gradle/publishing.gradle'
-//apply plugin: 'java-gradle-plugin'
-//apply plugin: "com.gradle.plugin-publish"
+apply plugin: 'io.github.robwin.jgitflow'
 
 tasks.withType(GroovyCompile) {
     sourceCompatibility = "1.7"
@@ -45,6 +45,10 @@ dependencies {
     testCompile("org.spockframework:spock-core:1.0-groovy-2.3") {
         exclude group: "org.codehaus.groovy"
     }
+}
+
+initJGitflow{
+    versiontag = 'v'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

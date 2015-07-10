@@ -17,22 +17,16 @@
  *
  */
 package io.github.robwin.jgitflow.tasks
-
-import com.atlassian.jgitflow.core.InitContext
 import com.atlassian.jgitflow.core.JGitFlow
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
 class ReleasePublishTask extends DefaultTask {
 
-    @Input
-    String releaseVersion;
-
     @TaskAction
     void publish(){
-        InitContext initContext = new InitContext()
-        JGitFlow flow = JGitFlow.getOrInit(project.rootProject.rootDir, initContext)
+        String releaseVersion = project.property('releaseVersion')
+        JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
         flow.releasePublish(releaseVersion).call();
     }
 }

@@ -24,6 +24,7 @@ import io.github.robwin.jgitflow.tasks.FeatureStartTask
 import io.github.robwin.jgitflow.tasks.HotfixFinishTask
 import io.github.robwin.jgitflow.tasks.HotfixPublishTask
 import io.github.robwin.jgitflow.tasks.HotfixStartTask
+import io.github.robwin.jgitflow.tasks.InitJGitflow
 import io.github.robwin.jgitflow.tasks.ReleaseFinishTask
 import io.github.robwin.jgitflow.tasks.ReleasePublishTask
 import io.github.robwin.jgitflow.tasks.ReleaseStartTask
@@ -32,6 +33,7 @@ import org.gradle.api.Project
 
 class JGitflowPlugin implements Plugin<Project> {
 
+    static final String INIT_JGTIFLOW_TASK_NAME = 'initJGitflow'
     static final String RELEASE_START_TASK_NAME = 'releaseStart'
     static final String RELEASE_FINISH_TASK_NAME = 'releaseFinish'
     static final String RELEASE_PUBLISH_TASK_NAME = 'releasePublish'
@@ -45,6 +47,12 @@ class JGitflowPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
+        project.task(
+                INIT_JGTIFLOW_TASK_NAME,
+                type: InitJGitflow,
+                group: GROUP_NAME,
+                description: 'Initializes the JGitflow context.')
+
         project.task(
                 RELEASE_START_TASK_NAME,
                 type: ReleaseStartTask,
