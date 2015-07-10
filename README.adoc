@@ -8,16 +8,16 @@ image:https://travis-ci.org/RobWin/jgitflow-gradle-plugin.svg["Build Status", li
 == Overview
 
 This is a Gradle Plugin which adds tasks to Gradle to support the https://de.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow/[Gitflow Workflow]. The Gitflow Workflow provides a robust framework for managing larger projects. The Plugin uses `org.eclipse.jgit` and `external.atlassian.jgitflow:jgit-flow-core` to implement the Gitflow Workflow. The project is inspired by the http://jgitflow.bitbucket.org/[JGitFlow Maven Plugin].
-The Plugin adds a task group `jgitflow` which contains the following tasks:
+The Plugin adds the task group `jgitflow` which contains the following tasks:
 
-* `releaseStart`: Creates a release branch `release/<releaseVersion>` and updates the gradle.properties file with a release version.
-* `releaseFinish`: Merges a release branch back into the master branch and develop branch and pushes everything to the remote origin.
+* `releaseStart`: Creates a release branch `release/<releaseVersion>` and updates the `gradle.properties` file with a release version. Switches to release branch.
+* `releaseFinish`: Merges a release branch back into the master branch and develop branch. Tags the release. Removes the release branch. Pushes everything to the remote origin. Switches back to develop branch.
 * `releasePublish`: Publishes a release branch to the remote origin.
 * `featureStart`: Creates a feature branch `feature/<featureName>`.
-* `featureFinish`: Merges a feature branch back into the develop branch.
+* `featureFinish`: Merges a feature branch back into the develop branch. Removes the feature branch. Switches back to develop branch.
 * `featurePublish`: Publishes a feature branch to the remote origin.
 * `hotfixStart`: Creates a hotfix branch `hotfix/<hotfixName>`.
-* `hotfixFinish`: Merges a hotfix branch back into the master branch and develop branch.
+* `hotfixFinish`: Merges a hotfix branch back into the master branch and develop branch. Additionally the master merge is tagged with the hotfix version. Switches back to develop branch.
 * `hotfixPublish`: Publishes a hotfix branch to the remote origin.
 
 The project requires at least JDK 7.
