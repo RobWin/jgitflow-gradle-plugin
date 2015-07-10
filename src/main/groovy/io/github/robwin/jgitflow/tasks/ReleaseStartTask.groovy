@@ -17,7 +17,6 @@
  *
  */
 package io.github.robwin.jgitflow.tasks
-
 import com.atlassian.jgitflow.core.JGitFlow
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.Status
@@ -26,20 +25,10 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.mvn3.org.apache.maven.artifact.ArtifactUtils
 
 class ReleaseStartTask extends DefaultTask {
-
-    @Input
-    @Optional
-    String baseCommit;
-
-    @Input
-    @Optional
-    boolean allowSnapshotDependencies
 
     @TaskAction
     void start(){
@@ -53,7 +42,10 @@ class ReleaseStartTask extends DefaultTask {
         //Make sure that the develop branch is used
         flow.git().checkout().setName(flow.getDevelopBranchName()).call()
 
-        if(!allowSnapshotDependencies){
+
+        String allowSnapshotDependencies = project.hasProperty('allowSnapshotDependencies') ? project.property('allowSnapshotDependencies') : false
+
+        if (!allowSnapshotDependencies) {
             //Check that no library dependency is a snapshot
             checkThatNoDependencyIsASnapshot()
         }
