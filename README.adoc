@@ -43,7 +43,9 @@ buildscript {
 apply plugin: 'io.github.robwin.jgitflow'
 ----
 
-The default `jgitflow` configuration looks as follows:
+=== JGitflow context configuration
+
+The default `jgitflow` context configuration looks as follows:
 
 .Branch names
 [options="header"]
@@ -57,6 +59,23 @@ The default `jgitflow` configuration looks as follows:
 |===
 
 By default a release tag has no version prefix.
+
+=== Initializes the JGitflow context
+
+Before you can use the tasks, you must initialize the JGitflow context.
+
+`gradlew initJGitflow`
+
+If you want to change the JGitflow context configuration, you can do the following.
+
+[source,groovy]
+----
+initJGitflow{
+    feature = "features/"
+    release = "releases/"
+    versiontag = 'v'
+}
+----
 
 === Release Start Task
 
