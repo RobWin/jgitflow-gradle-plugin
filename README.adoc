@@ -1,6 +1,6 @@
 = JGitflow Gradle Plugin
 :author: Robert Winkler
-:version: 0.2.0
+:version: 0.2.1
 :hardbreaks:
 
 image:https://travis-ci.org/RobWin/jgitflow-gradle-plugin.svg["Build Status", link="https://travis-ci.org/RobWin/jgitflow-gradle-plugin"] image:https://coveralls.io/repos/RobWin/jgitflow-gradle-plugin/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/jgitflow-gradle-plugin"] image:https://api.bintray.com/packages/robwin/maven/jgitflow-gradle-plugin/images/download.svg[link="https://bintray.com/robwin/maven/jgitflow-gradle-plugin/_latestVersion"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"] image:https://img.shields.io/badge/Twitter-rbrtwnklr-blue.svg["Twitter", link="https://twitter.com/rbrtwnklr"] image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/RobWin/jgitflow-gradle-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"]
@@ -21,7 +21,7 @@ The Plugin adds the task group `jgitflow` which contains the following tasks:
 * `hotfixFinish`: Merges a hotfix branch back into the master branch and develop branch. Additionally the master merge is tagged with the hotfix version. Switches back to develop branch.
 * `hotfixPublish`: Publishes a hotfix branch to the remote origin.
 
-The project requires at least JDK 7. The projects eats its own dog food.
+The project requires at least JDK 7. The project eats its own dog food.
 
 == Usage Guide
 
@@ -77,6 +77,16 @@ initJGitflow{
 }
 ----
 
+=== Git authentication
+
+If you want to push changes to a remote origin, you must specify your username and password in a `~/.gradle/gradle.properties` file.
+SSH is not supported yet.
+
+----
+gitUsername=<username>
+gitPassword=<password>
+----
+
 === Release Start Task
 
 The task exposes a few properties as part of its configuration.
@@ -119,7 +129,7 @@ The task exposes a few properties as part of its configuration.
 
 The tasks should be invoked via a command line.
 
-`gradlew featureStart -PfeatureName="New feature"`
+`gradlew featureStart -PfeatureName="NewFeature"`
 
 === Feature Finish Task
 
@@ -127,7 +137,7 @@ The tasks should be invoked via a command line.
 
 The tasks should be invoked via a command line.
 
-`gradlew featureFinish -PfeatureName="New feature"`
+`gradlew featureFinish -PfeatureName="NewFeature"`
 
 === Hotfix Start Task
 
@@ -145,7 +155,7 @@ The task exposes a few properties as part of its configuration.
 
 The tasks should be invoked via a command line.
 
-`gradlew hotfixStart -PhotfixName="Hotfix for bug XYZ"`
+`gradlew hotfixStart -PhotfixName="HotfixXYZ"`
 
 === Hotfix Finish Task
 
@@ -153,7 +163,7 @@ The tasks should be invoked via a command line.
 
 The tasks should be invoked via a command line.
 
-`gradlew hotfixFinish -PhotfixName="Hotfix for bug XYZ"`
+`gradlew hotfixFinish -PhotfixName="HotfixXYZ"`
 
 == License
 

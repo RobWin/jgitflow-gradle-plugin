@@ -18,6 +18,7 @@
  */
 package io.github.robwin.jgitflow.tasks
 import com.atlassian.jgitflow.core.JGitFlow
+import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
@@ -26,6 +27,7 @@ class FeaturePublishTask extends DefaultTask {
     @TaskAction
     void publish(){
         String featureName = project.property('featureName')
+        CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
         flow.featurePublish(featureName).setPush(true).call();
     }

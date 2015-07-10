@@ -9,7 +9,8 @@ buildscript {
     dependencies {
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
-        classpath 'io.github.robwin:jgitflow-gradle-plugin:0.2.0'
+        classpath 'io.github.robwin:jgitflow-gradle-plugin:0.2.1'
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.1"
     }
 }
 
@@ -23,6 +24,7 @@ apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'com.jfrog.bintray'
 apply from: 'gradle/publishing.gradle'
 apply plugin: 'io.github.robwin.jgitflow'
+apply plugin: "com.gradle.plugin-publish"
 
 tasks.withType(GroovyCompile) {
     sourceCompatibility = "1.7"
@@ -77,21 +79,19 @@ artifacts {
     archives javadocJar
 }
 
-/*
 pluginBundle {
-    website = 'https://github.com/RobWin/swagger2markup-gradle-plugin'
-    vcsUrl = 'https://github.com/RobWin/swagger2markup-gradle-plugin'
+    website = 'https://github.com/RobWin/jgitflow-gradle-plugin'
+    vcsUrl = 'https://github.com/RobWin/jgitflow-gradle-plugin'
     description = project.description
-    tags = ['swagger', 'asciidoc', 'markdown']
+    tags = ['gitflow']
 
     plugins {
         swagger2MarkupPlugin {
-            id = 'io.github.robwin.swagger2markup'
-            displayName = 'Swagger2Markup Gradle plugin'
+            id = 'io.github.robwin.jgitflow'
+            displayName = project.description
         }
     }
 }
-*/
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.4'
