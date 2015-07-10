@@ -63,6 +63,8 @@ class InitJGitflow extends DefaultTask {
                 .setVersiontag(versiontag)
         JGitFlow flow = JGitFlow.forceInit(project.rootProject.rootDir, initContext)
 
+        flow.git().
+
         //Switch to develop branch
         flow.git().checkout().setName(flow.getDevelopBranchName()).call()
     }

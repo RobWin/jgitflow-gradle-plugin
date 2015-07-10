@@ -18,6 +18,7 @@
  */
 package io.github.robwin.jgitflow.tasks
 import com.atlassian.jgitflow.core.JGitFlow
+import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.Status
 import org.eclipse.jgit.api.errors.GitAPIException
@@ -34,6 +35,7 @@ class ReleaseStartTask extends DefaultTask {
     void start(){
 
         String releaseVersion = project.property('releaseVersion')
+        CredentialsProviderHelper.setupCredentialProvider(project)
 
         validateReleaseVersion(releaseVersion)
 

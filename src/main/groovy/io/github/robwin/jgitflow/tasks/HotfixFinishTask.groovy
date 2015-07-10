@@ -18,7 +18,10 @@
  */
 package io.github.robwin.jgitflow.tasks
 import com.atlassian.jgitflow.core.JGitFlow
+import com.atlassian.jgitflow.core.ReleaseMergeResult
+import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 
 class HotfixFinishTask extends DefaultTask {
@@ -26,7 +29,23 @@ class HotfixFinishTask extends DefaultTask {
     @TaskAction
     void finish(){
         String hotfixName = project.property('hotfixName')
+        CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
-        flow.hotfixFinish(hotfixName).call();
+        ReleaseMergeResult mergeResult = flow.hotfixFinish(hotfixName).call();
+        if (!mergeResult.wasSuccessful())
+        {
+            if (mergeResult.masterHasProblems())
+            {
+                logger.error("Error merging into " + flow.getMasterBranchName() + ":");
+                logger.error(mergeResult.getMasterResult().toString());
+            }
+
+            if (mergeResult.developHasProblems())
+            {
+                logger.error("Error merging into " + flow.getDevelopBranchName() + ":");
+                logger.error(mergeResult.getDevelopResult().toString());
+            }
+            throw new GradleException("Error while merging hotfix!");
+        }
     }
 }
