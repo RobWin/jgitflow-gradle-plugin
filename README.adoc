@@ -1,6 +1,6 @@
 = JGitflow Gradle Plugin
 :author: Robert Winkler
-:version: 0.1.0
+:version: 0.2.0
 :hardbreaks:
 
 image:https://travis-ci.org/RobWin/jgitflow-gradle-plugin.svg["Build Status", link="https://travis-ci.org/RobWin/jgitflow-gradle-plugin"] image:https://coveralls.io/repos/RobWin/jgitflow-gradle-plugin/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/jgitflow-gradle-plugin"] image:https://api.bintray.com/packages/robwin/maven/jgitflow-gradle-plugin/images/download.svg[link="https://bintray.com/robwin/maven/jgitflow-gradle-plugin/_latestVersion"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"] image:https://img.shields.io/badge/Twitter-rbrtwnklr-blue.svg["Twitter", link="https://twitter.com/rbrtwnklr"] image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/RobWin/jgitflow-gradle-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"]
@@ -10,6 +10,7 @@ image:https://travis-ci.org/RobWin/jgitflow-gradle-plugin.svg["Build Status", li
 This is a Gradle Plugin which adds tasks to Gradle to support the https://de.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow/[Gitflow Workflow]. The Gitflow Workflow provides a robust framework for managing larger projects. The Plugin uses `org.eclipse.jgit` and `external.atlassian.jgitflow:jgit-flow-core` to implement the Gitflow Workflow. The project is inspired by the http://jgitflow.bitbucket.org/[JGitFlow Maven Plugin].
 The Plugin adds the task group `jgitflow` which contains the following tasks:
 
+* `initJGitflow`: Initializes the JGitflow context. Creates a develop branch and switches to develop branch.
 * `releaseStart`: Creates a release branch `release/<releaseVersion>` from a develop branch and updates the `gradle.properties` file with a release version. Switches to release branch.
 * `releaseFinish`: Merges a release branch back into the master branch and develop branch. Tags the release. Removes the release branch. Pushes everything to the remote origin. Switches back to develop branch.
 * `releasePublish`: Publishes a release branch to the remote origin.
@@ -20,7 +21,7 @@ The Plugin adds the task group `jgitflow` which contains the following tasks:
 * `hotfixFinish`: Merges a hotfix branch back into the master branch and develop branch. Additionally the master merge is tagged with the hotfix version. Switches back to develop branch.
 * `hotfixPublish`: Publishes a hotfix branch to the remote origin.
 
-The project requires at least JDK 7.
+The project requires at least JDK 7. The projects eats its own dog food.
 
 == Usage Guide
 

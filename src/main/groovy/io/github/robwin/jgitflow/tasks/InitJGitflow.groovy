@@ -18,30 +18,53 @@
  */
 package io.github.robwin.jgitflow.tasks
 
+import com.atlassian.jgitflow.core.InitContext
 import com.atlassian.jgitflow.core.JGitFlow
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 
-class HotfixStartTask extends DefaultTask {
-
-    @Input
-    String hotfixName;
+class InitJGitflow extends DefaultTask {
 
     @Input
     @Optional
-    String baseCommit;
+    String master = "master";
+
+    @Input
+    @Optional
+    String develop = "develop";
+
+    @Input
+    @Optional
+    String release = "release/";
+
+    @Input
+    @Optional
+    String feature = "feature/";
+
+    @Input
+    @Optional
+    String hotfix = "hotfix/";
+
+    @Input
+    @Optional
+    String versiontag = "";
+
 
     @TaskAction
-    void start(){
-        JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
+    void init(){
+        InitContext initContext = new InitContext()
+        initContext.setMaster(master)
+                .setDevelop(develop)
+                .setRelease(release)
+                .setFeature(feature)
+                .setHotfix(hotfix)
+                .setVersiontag(versiontag)
+        JGitFlow flow = JGitFlow.forceInit(project.rootProject.rootDir, initContext)
 
-        //Start a hotfix
-        def command = flow.hotfixStart(hotfixName)
-        if (baseCommit) {
-            command.setStartCommit(baseCommit)
-        }
-        command.call()
+        //Switch to develop branch
+        flow.git().checkout().setName(flow.getDevelopBranchName()).call()
     }
+
 }

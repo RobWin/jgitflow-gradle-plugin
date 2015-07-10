@@ -17,7 +17,7 @@
  *
  */
 package io.github.robwin.jgitflow.tasks
-import com.atlassian.jgitflow.core.InitContext
+
 import com.atlassian.jgitflow.core.JGitFlow
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.Status
@@ -49,8 +49,7 @@ class ReleaseStartTask extends DefaultTask {
 
         validateReleaseVersion()
 
-        InitContext initContext = new InitContext()
-        JGitFlow flow = JGitFlow.getOrInit(project.rootProject.rootDir, initContext)
+        JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
 
         //Make sure that the develop branch is used
         flow.git().checkout().setName(flow.getDevelopBranchName()).call()

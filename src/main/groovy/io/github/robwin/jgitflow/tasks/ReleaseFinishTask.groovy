@@ -18,7 +18,6 @@
  */
 package io.github.robwin.jgitflow.tasks
 
-import com.atlassian.jgitflow.core.InitContext
 import com.atlassian.jgitflow.core.JGitFlow
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -34,8 +33,7 @@ class ReleaseFinishTask extends DefaultTask {
 
     @TaskAction
     void finish(){
-        InitContext initContext = new InitContext()
-        JGitFlow flow = JGitFlow.getOrInit(project.rootProject.rootDir, initContext)
+        JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
         flow.releaseFinish(releaseVersion).setPush(true).call();
 
         //Local working copy is now on develop branch
