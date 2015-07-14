@@ -24,7 +24,7 @@ import io.github.robwin.jgitflow.tasks.FeatureStartTask
 import io.github.robwin.jgitflow.tasks.HotfixFinishTask
 import io.github.robwin.jgitflow.tasks.HotfixPublishTask
 import io.github.robwin.jgitflow.tasks.HotfixStartTask
-import io.github.robwin.jgitflow.tasks.InitJGitflow
+import io.github.robwin.jgitflow.tasks.InitJGitflowTask
 import io.github.robwin.jgitflow.tasks.ReleaseFinishTask
 import io.github.robwin.jgitflow.tasks.ReleasePublishTask
 import io.github.robwin.jgitflow.tasks.ReleaseStartTask
@@ -49,7 +49,7 @@ class JGitflowPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.task(
                 INIT_JGTIFLOW_TASK_NAME,
-                type: InitJGitflow,
+                type: InitJGitflowTask,
                 group: GROUP_NAME,
                 description: 'Initializes the JGitflow context.')
 
