@@ -9,3 +9,6 @@
 
 === Version 0.2.1
 * Allow git authentication via username and password to push changes to remote origin
+
+=== Version 0.2.2
+* Added git authentication to InitJGitflowTask
