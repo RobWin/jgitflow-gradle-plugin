@@ -16,5 +16,5 @@
 === Version 0.2.3
 * ReleaseFinish tasks has a new property called 'newVersion' to specify the next snapshot version.
 
-=== Version 0.2.3
+=== Version 0.2.4
 * Added push to origin after updating the version of the develop branch
