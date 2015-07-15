@@ -19,15 +19,14 @@
 package io.github.robwin.jgitflow.tasks
 import com.atlassian.jgitflow.core.JGitFlow
 import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
-import org.eclipse.jgit.api.Git
-import org.eclipse.jgit.api.Status
-import org.eclipse.jgit.api.errors.GitAPIException
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
-import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.tasks.TaskAction
 import org.gradle.mvn3.org.apache.maven.artifact.ArtifactUtils
+
+import static io.github.robwin.jgitflow.tasks.helper.GitHelper.commitGradlePropertiesFile
+import static io.github.robwin.jgitflow.tasks.helper.GitHelper.updateGradlePropertiesFile
 
 class ReleaseStartTask extends DefaultTask {
 
@@ -62,7 +61,7 @@ class ReleaseStartTask extends DefaultTask {
         //Local working copy is now on release branch
 
         //Update the release version
-        updateGradlePropertiesFile(releaseVersion)
+        updateGradlePropertiesFile(project, releaseVersion)
 
         //Commit the release version
         commitGradlePropertiesFile(flow.git(), "[JGitFlow Gradle Plugin] Updated gradle.properties for v" + releaseVersion + " release")
@@ -93,27 +92,4 @@ class ReleaseStartTask extends DefaultTask {
         }
     }
 
-    private void updateGradlePropertiesFile(String releaseVersion)
-    {
-        String currentVersion = project.version
-        File propertiesFile = project.file(Project.GRADLE_PROPERTIES)
-        if (!propertiesFile.file) {
-            propertiesFile.append("version=${releaseVersion}")
-        }else {
-            project.ant.replace(file: propertiesFile, token: "version=${currentVersion}", value: "version=${releaseVersion}", failOnNoReplacements: true)
-        }
-    }
-
-    private void commitGradlePropertiesFile(Git git, String message) {
-        try {
-            Status status = git.status().call()
-            if (!status.isClean()) {
-                //logger.info("Added ${project.file(Project.GRADLE_PROPERTIES).absolutePath}")
-                git.add().addFilepattern(".").call()
-                git.commit().setMessage(message).call()
-            }
-        }catch (GitAPIException e) {
-            throw new GradleException("Failed to commit gradle.properties: ${e.message}", e)
-        }
-    }
 }

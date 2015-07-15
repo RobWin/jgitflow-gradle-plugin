@@ -12,3 +12,6 @@
 
 === Version 0.2.2
 * Added git authentication to InitJGitflowTask
+
+=== Version 0.2.3
+* ReleaseFinish tasks has a new property called 'newVersion' to specify the next snapshot version.
