@@ -35,7 +35,7 @@ class ReleaseFinishTask extends DefaultTask {
         String newVersion = project.property('newVersion')
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
-        ReleaseMergeResult mergeResult = flow.releaseFinish(releaseVersion).setPush(true).call();
+        ReleaseMergeResult mergeResult = flow.releaseFinish(releaseVersion).call();
         if (!mergeResult.wasSuccessful())
         {
             if (mergeResult.masterHasProblems())
@@ -52,6 +52,7 @@ class ReleaseFinishTask extends DefaultTask {
             throw new GradleException("Error while merging release!");
         }
         //Local working copy is now on develop branch
+
         //Update the develop version to the new version
         updateGradlePropertiesFile(project, newVersion)
 
