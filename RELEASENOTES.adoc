@@ -18,6 +18,3 @@
 
 === Version 0.2.4
 * Added push to origin after updating the version of the develop branch
-
-=== Version 0.2.5
-* Added push to origin after updating the version of the develop branch
