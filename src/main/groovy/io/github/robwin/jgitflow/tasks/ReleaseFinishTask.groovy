@@ -24,11 +24,15 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 
+import static io.github.robwin.jgitflow.tasks.helper.GitHelper.commitGradlePropertiesFile
+import static io.github.robwin.jgitflow.tasks.helper.GitHelper.updateGradlePropertiesFile
+
 class ReleaseFinishTask extends DefaultTask {
 
     @TaskAction
     void finish(){
         String releaseVersion = project.property('releaseVersion')
+        String newVersion = project.property('newVersion')
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
         ReleaseMergeResult mergeResult = flow.releaseFinish(releaseVersion).setPush(true).call();
@@ -48,5 +52,11 @@ class ReleaseFinishTask extends DefaultTask {
             throw new GradleException("Error while merging release!");
         }
         //Local working copy is now on develop branch
+        //Update the develop version to the new version
+        updateGradlePropertiesFile(project, newVersion)
+
+        //Commit the release version
+        commitGradlePropertiesFile(flow.git(), "[JGitFlow Gradle Plugin] Updated gradle.properties to version '${newVersion}'")
+
     }
 }

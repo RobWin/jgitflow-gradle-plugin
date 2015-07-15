@@ -114,11 +114,19 @@ The tasks should be invoked via a command line.
 
 === Release Finish Task
 
+.Properties of releaseFinish
+[options="header"]
+|===
+|Mandatory |Property | Description | Type | Default
+|Yes |releaseVersion | The version of the release |  String | empty
+|Yes |newVersion | The new version of the develop branch |  String | empty
+|===
+
 ==== Example
 
 The tasks should be invoked via a command line.
 
-`gradlew releaseFinish -PreleaseVersion=1.0.0`
+`gradlew releaseFinish -PreleaseVersion=1.0.0` -PnewVersion=1.0.1-SNAPSHOT
 
 === Feature Start Task
 
@@ -138,6 +146,13 @@ The tasks should be invoked via a command line.
 `gradlew featureStart -PfeatureName="NewFeature"`
 
 === Feature Finish Task
+
+.Properties of featureFinish
+[options="header"]
+|===
+|Mandatory |Property | Description | Type | Default
+|Yes |featureName | The name of the feature |  String | empty
+|===
 
 ==== Example
 
@@ -164,6 +179,13 @@ The tasks should be invoked via a command line.
 `gradlew hotfixStart -PhotfixName="HotfixXYZ"`
 
 === Hotfix Finish Task
+
+.Properties of hotfixFinish
+[options="header"]
+|===
+|Mandatory |Property | Description | Type | Default
+|Yes |hotfixName | The name of the hotfix |  String | empty
+|===
 
 ==== Example
 
