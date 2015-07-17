@@ -59,7 +59,7 @@ class ReleaseFinishTask extends DefaultTask {
         //Commit the release version
         commitGradlePropertiesFile(flow.git(), "[JGitFlow Gradle Plugin] Updated gradle.properties to version '${newVersion}'")
 
-        flow.git().push().call();
+        flow.git().push().setPushAll().setPushTags().call();
 
     }
 }
