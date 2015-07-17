@@ -21,3 +21,6 @@
 
 === Version 0.2.5
 * Bugfix: Push in ReleaseFinish was done twice, but should only be invoked once.
+
+=== Version 0.2.6
+* Bugfix: ReleaseFinish pushes all branches and tags now.
