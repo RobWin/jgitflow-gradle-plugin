@@ -24,3 +24,7 @@
 
 === Version 0.2.6
 * Bugfix: ReleaseFinish pushes all branches and tags now.
+
+=== Version 0.3.0
+* Updated Gradle version to v2.7
+* Bugfix: Fixed Maven packages

@@ -1,6 +1,6 @@
 = JGitflow Gradle Plugin
 :author: Robert Winkler
-:version: 0.2.6
+:version: 0.3.0
 :hardbreaks:
 
 image:https://travis-ci.org/RobWin/jgitflow-gradle-plugin.svg["Build Status", link="https://travis-ci.org/RobWin/jgitflow-gradle-plugin"] image:https://coveralls.io/repos/RobWin/jgitflow-gradle-plugin/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/jgitflow-gradle-plugin"] image:https://api.bintray.com/packages/robwin/maven/jgitflow-gradle-plugin/images/download.svg[link="https://bintray.com/robwin/maven/jgitflow-gradle-plugin/_latestVersion"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"] image:https://img.shields.io/badge/Twitter-rbrtwnklr-blue.svg["Twitter", link="https://twitter.com/rbrtwnklr"] image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/RobWin/jgitflow-gradle-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"]
