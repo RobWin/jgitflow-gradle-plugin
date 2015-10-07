@@ -19,11 +19,11 @@
 package io.github.robwin.jgitflow.tasks
 import com.atlassian.jgitflow.core.JGitFlow
 import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
+import org.apache.maven.artifact.ArtifactUtils
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.tasks.TaskAction
-import org.gradle.mvn3.org.apache.maven.artifact.ArtifactUtils
 
 import static io.github.robwin.jgitflow.tasks.helper.GitHelper.commitGradlePropertiesFile
 import static io.github.robwin.jgitflow.tasks.helper.GitHelper.updateGradlePropertiesFile
