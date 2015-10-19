@@ -126,7 +126,7 @@ The tasks should be invoked via a command line.
 
 The tasks should be invoked via a command line.
 
-`gradlew releaseFinish -PreleaseVersion=1.0.0` -PnewVersion=1.0.1-SNAPSHOT
+`gradlew releaseFinish -PreleaseVersion=1.0.0 -PnewVersion=1.0.1-SNAPSHOT`
 
 === Feature Start Task
 

@@ -27,4 +27,6 @@
 
 === Version 0.3.0
 * Updated Gradle version to v2.7
-* Bugfix: Fixed Maven packages
+
+=== Version 0.3.1
+* Bugfix: Removed Maven packages
