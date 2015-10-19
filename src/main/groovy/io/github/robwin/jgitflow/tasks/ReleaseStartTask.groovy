@@ -19,7 +19,7 @@
 package io.github.robwin.jgitflow.tasks
 import com.atlassian.jgitflow.core.JGitFlow
 import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
-import org.apache.maven.artifact.ArtifactUtils
+import io.github.robwin.jgitflow.tasks.helper.ArtifactHelper
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.artifacts.Dependency
@@ -71,7 +71,7 @@ class ReleaseStartTask extends DefaultTask {
         if(project.version == releaseVersion){
             throw new GradleException("Release version '${releaseVersion}' and current version '${project.version}' must not be equal.")
         }
-        if(ArtifactUtils.isSnapshot(releaseVersion)){
+        if(ArtifactHelper.isSnapshot(releaseVersion)){
             throw new GradleException("Release version must not be a snapshot version: ${releaseVersion}")
         }
     }
@@ -81,7 +81,7 @@ class ReleaseStartTask extends DefaultTask {
         project.allprojects.each { project ->
             project.configurations.each { configuration ->
                 configuration.allDependencies.each { Dependency dependency ->
-                    if (!dependency.group.equals(project.group) && ArtifactUtils.isSnapshot(dependency.version)) {
+                    if (!dependency.group.equals(project.group) && ArtifactHelper.isSnapshot(dependency.version)) {
                         snapshotDependencies.add("${dependency.group}:${dependency.name}:${dependency.version}")
                     }
                 }
