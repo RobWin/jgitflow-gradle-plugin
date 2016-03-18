@@ -61,5 +61,6 @@ class ReleaseFinishTask extends DefaultTask {
 
         flow.git().push().setPushAll().setPushTags().call();
 
+        flow.git().close()
     }
 }

@@ -37,5 +37,7 @@ class HotfixStartTask extends DefaultTask {
             command.setStartCommit(baseCommit)
         }
         command.call()
+
+        flow.git().close()
     }
 }

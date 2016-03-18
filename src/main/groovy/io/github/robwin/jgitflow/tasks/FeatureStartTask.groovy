@@ -30,5 +30,6 @@ class FeatureStartTask extends DefaultTask {
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
         flow.featureStart(featureName).call();
+        flow.git().close()
     }
 }

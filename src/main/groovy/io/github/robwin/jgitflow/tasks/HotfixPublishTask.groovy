@@ -30,5 +30,6 @@ class HotfixPublishTask extends DefaultTask {
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
         flow.hotfixPublish(hotfixName).call();
+        flow.git().close()
     }
 }

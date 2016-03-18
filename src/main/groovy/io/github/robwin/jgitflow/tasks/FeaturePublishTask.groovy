@@ -30,5 +30,6 @@ class FeaturePublishTask extends DefaultTask {
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
         flow.featurePublish(featureName).setPush(true).call();
+        flow.git().close()
     }
 }

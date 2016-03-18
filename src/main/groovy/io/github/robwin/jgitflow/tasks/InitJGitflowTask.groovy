@@ -67,6 +67,8 @@ class InitJGitflowTask extends DefaultTask {
 
         //Switch to develop branch
         flow.git().checkout().setName(flow.getDevelopBranchName()).call()
+
+        flow.git().close()
     }
 
 }

@@ -65,6 +65,8 @@ class ReleaseStartTask extends DefaultTask {
 
         //Commit the release version
         commitGradlePropertiesFile(flow.git(), "[JGitFlow Gradle Plugin] Updated gradle.properties for v" + releaseVersion + " release")
+
+        flow.git().close()
     }
 
     private void validateReleaseVersion(String releaseVersion) {
