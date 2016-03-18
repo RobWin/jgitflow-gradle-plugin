@@ -47,5 +47,6 @@ class HotfixFinishTask extends DefaultTask {
             }
             throw new GradleException("Error while merging hotfix!");
         }
+        flow.git().close()
     }
 }

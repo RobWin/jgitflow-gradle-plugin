@@ -30,5 +30,6 @@ class ReleasePublishTask extends DefaultTask {
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
         flow.releasePublish(releaseVersion).call();
+        flow.git().close()
     }
 }

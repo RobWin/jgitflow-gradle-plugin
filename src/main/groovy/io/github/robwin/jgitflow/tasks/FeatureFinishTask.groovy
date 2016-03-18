@@ -38,5 +38,6 @@ class FeatureFinishTask extends DefaultTask {
             getLogger().error(mergeResult.toString());
             throw new GradleException("Error while merging feature!");
         }
+        flow.git().close()
     }
 }
