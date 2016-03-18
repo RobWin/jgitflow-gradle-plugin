@@ -21,7 +21,7 @@ The Plugin adds the task group `jgitflow` which contains the following tasks:
 * `hotfixFinish`: Merges a hotfix branch back into the master branch and develop branch. Additionally the master merge is tagged with the hotfix version. Switches back to develop branch.
 * `hotfixPublish`: Publishes a hotfix branch to the remote origin.
 
-The project requires at least JDK 7. The project eats its own dog food.
+The project requires at least JDK 7.
 
 == Usage Guide
 
