@@ -33,6 +33,10 @@ class ReleaseFinishTask extends DefaultTask {
     void finish(){
         String releaseVersion = project.property('releaseVersion')
         String newVersion = project.property('newVersion')
+        boolean pushRelease = true;
+        if (project.properties.containsKey('pushRelease')) {
+            pushRelease = Boolean.valueOf(project.property('pushRelease'))
+        }
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
         ReleaseMergeResult mergeResult = flow.releaseFinish(releaseVersion).call();
@@ -59,7 +63,9 @@ class ReleaseFinishTask extends DefaultTask {
         //Commit the release version
         commitGradlePropertiesFile(flow.git(), "[JGitFlow Gradle Plugin] Updated gradle.properties to version '${newVersion}'")
 
-        flow.git().push().setPushAll().setPushTags().call();
+        if (pushRelease) {
+            flow.git().push().setPushAll().setPushTags().call();
+        }
 
         flow.git().close()
     }
