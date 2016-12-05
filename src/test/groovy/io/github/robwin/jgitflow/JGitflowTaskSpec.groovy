@@ -27,7 +27,6 @@ import org.eclipse.jgit.lib.Ref
 import org.eclipse.jgit.revwalk.RevCommit
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
-import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -197,9 +196,9 @@ class JGitflowTaskSpec extends Specification{
         when:
         releaseFinishTask.execute()
         loadGradleProperties()
-        List<RevCommit> remoteMasterLog = log(remoteGit, jGitFlow.masterBranchName, -1)
+        List<RevCommit> remoteMasterLog = log(remoteGit, jGitFlow.masterBranchName, 2)
         dumpLogs(remoteMasterLog, jGitFlow.masterBranchName)
-        List<RevCommit> remoteDevelopLog = log(remoteGit, jGitFlow.developBranchName, -1)
+        List<RevCommit> remoteDevelopLog = log(remoteGit, jGitFlow.developBranchName, 3)
         dumpLogs(remoteDevelopLog, jGitFlow.developBranchName)
 
         then:
@@ -247,13 +246,13 @@ class JGitflowTaskSpec extends Specification{
         releaseFinishTask.execute()
         loadGradleProperties()
 
-        List<RevCommit> remoteMasterLog = log(remoteGit, jGitFlow.masterBranchName, -1)
+        List<RevCommit> remoteMasterLog = log(remoteGit, jGitFlow.masterBranchName, 2)
         //dumpLogs(remoteMasterLog, jGitFlow.masterBranchName)
-        List<RevCommit> remoteDevelopLog = log(remoteGit, jGitFlow.developBranchName, -1)
+        List<RevCommit> remoteDevelopLog = log(remoteGit, jGitFlow.developBranchName, 3)
         //dumpLogs(remoteDevelopLog, jGitFlow.developBranchName)
-        List<RevCommit> localMasterLog = log(localGit, jGitFlow.masterBranchName, -1)
+        List<RevCommit> localMasterLog = log(localGit, jGitFlow.masterBranchName, 2)
         //dumpLogs(localMasterLog, jGitFlow.masterBranchName)
-        List<RevCommit> localDevelopLog = log(localGit, jGitFlow.developBranchName, -1)
+        List<RevCommit> localDevelopLog = log(localGit, jGitFlow.developBranchName, 3)
         //dumpLogs(localDevelopLog, jGitFlow.developBranchName)
 
         then:
@@ -306,9 +305,9 @@ class JGitflowTaskSpec extends Specification{
         when:
         releaseFinishTask.execute()
         loadGradleProperties()
-        List<RevCommit> remoteMasterLog = log(remoteGit, jGitFlow.masterBranchName, -1)
+        List<RevCommit> remoteMasterLog = log(remoteGit, jGitFlow.masterBranchName, 2)
         //dumpLogs(remoteMasterLog, jGitFlow.masterBranchName)
-        List<RevCommit> remoteDevelopLog = log(remoteGit, jGitFlow.developBranchName, -1)
+        List<RevCommit> remoteDevelopLog = log(remoteGit, jGitFlow.developBranchName, 3)
         //dumpLogs(remoteDevelopLog, jGitFlow.developBranchName)
 
         then:
