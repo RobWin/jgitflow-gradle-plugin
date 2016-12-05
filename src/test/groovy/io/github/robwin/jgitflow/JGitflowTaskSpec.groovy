@@ -38,8 +38,12 @@ class JGitflowTaskSpec extends Specification{
     static final GIT_USERNAME = 'gitusername'
     static final GIT_PASSWORD = 'gitpassword'
     static final PROJECT_VERSION = '0.0.1-SNAPSHOT'
-    static final RELEASE_VERSION = '0.0.1'
-    static final NEW_VERSION = '0.0.2-SNAPSHOT'
+    static final RELEASE_VERSION_1 = '0.0.1'
+    static final RELEASE_VERSION_2 = '0.0.2'
+    static final RELEASE_VERSION_3 = '0.0.3'
+    static final NEW_VERSION_1 = '0.0.2-SNAPSHOT'
+    static final NEW_VERSION_2 = '0.0.3-SNAPSHOT'
+    static final NEW_VERSION_3 = '0.0.4-SNAPSHOT'
 
     @Shared JGitFlow jGitFlow
 
@@ -94,8 +98,6 @@ class JGitflowTaskSpec extends Specification{
                 .withProjectDir(localGit.repository.directory.parentFile)
                 .build()
         project.version = PROJECT_VERSION
-        project.ext.set('releaseVersion', RELEASE_VERSION)
-        project.ext.set('newVersion', NEW_VERSION)
         project.ext.set('gitUserName', GIT_USERNAME)
         project.ext.set('gitPassword', GIT_PASSWORD)
         project.pluginManager.apply 'io.github.robwin.jgitflow'
@@ -105,12 +107,15 @@ class JGitflowTaskSpec extends Specification{
         assert !userHomeDir.exists() || userHomeDir.deleteDir()
     }
 
+    def setup() {
+        setupProject()
+    }
+
     def setupSpec() {
         // Override the gradle native dir so it won't be created in the local Git working directory
         System.setProperty('org.gradle.native.dir', System.getProperty('java.io.tmpdir'))
 
         setupGitRepositories()
-        setupProject()
     }
 
     def cleanupSpec() {
@@ -123,6 +128,12 @@ class JGitflowTaskSpec extends Specification{
         remoteGit.repository.directory.deleteDir()
     }
 
+    def dumpLogs(List<RevCommit> logEntries, String branchName) {
+        println("branch = ${branchName}")
+        logEntries.each() {
+            println("${it.commitTime} - ${it.fullMessage}")
+        }
+    }
 
     def "Test InitJGitflowTask"() {
         InitJGitflowTask initJGitflowTask = project.tasks.findByName(JGitflowPlugin.INIT_JGTIFLOW_TASK_NAME)
@@ -146,6 +157,8 @@ class JGitflowTaskSpec extends Specification{
 
     def "Test ReleaseStartTask"() {
         setup:
+        project.ext.set('releaseVersion', RELEASE_VERSION_1)
+
         ReleaseStartTask releaseStartTask = project.tasks.findByName(JGitflowPlugin.RELEASE_START_TASK_NAME)
         Ref releaseBranch;
 
@@ -158,37 +171,152 @@ class JGitflowTaskSpec extends Specification{
         when:
         releaseStartTask.execute()
         loadGradleProperties()
-        releaseBranch = findBranch(localGit, "${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION}")
+        releaseBranch = findBranch(localGit, "${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_1}")
 
         then:
         notThrown(Throwable)
         releaseBranch != null
-        gradleProperties.version == RELEASE_VERSION
+        gradleProperties.version == RELEASE_VERSION_1
     }
 
-    def "Test ReleaseFinishTask" () {
+    def "Test ReleaseFinishTask WithPushReleasesTrue" () {
         setup:
+        project.ext.set('releaseVersion', RELEASE_VERSION_1)
+        project.ext.set('newVersion', NEW_VERSION_1)
+        project.ext.set('pushRelease', "true")
+
         ReleaseFinishTask releaseFinishTask = project.tasks.findByName(JGitflowPlugin.RELEASE_FINISH_TASK_NAME)
 
         loadGradleProperties()
 
         expect:
         releaseFinishTask != null
-        gradleProperties.version == RELEASE_VERSION
+        gradleProperties.version == RELEASE_VERSION_1
 
         when:
         releaseFinishTask.execute()
         loadGradleProperties()
         List<RevCommit> remoteMasterLog = log(remoteGit, jGitFlow.masterBranchName, 2)
+        dumpLogs(remoteMasterLog, jGitFlow.masterBranchName)
         List<RevCommit> remoteDevelopLog = log(remoteGit, jGitFlow.developBranchName, 3)
+        dumpLogs(remoteDevelopLog, jGitFlow.developBranchName)
 
         then:
         notThrown(Throwable)
-        gradleProperties.version == NEW_VERSION
-        remoteMasterLog.get(0).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION}'"
-        remoteMasterLog.get(1).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION} release"
-        remoteDevelopLog.get(0).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION}'"
+        gradleProperties.version == NEW_VERSION_1
+        remoteMasterLog.get(0).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_1}'"
+        remoteMasterLog.get(1).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_1} release"
+        remoteDevelopLog.get(0).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_1}'"
         remoteDevelopLog.get(1).fullMessage == "Merge branch '${jGitFlow.masterBranchName}' into ${jGitFlow.developBranchName}"
-        remoteDevelopLog.get(2).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION}'"
+        remoteDevelopLog.get(2).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_1}'"
+    }
+
+    def "Test ReleaseFinishTask WithPushReleasesFalse" () {
+        setup:
+        project.ext.set('releaseVersion', RELEASE_VERSION_2)
+        project.ext.set('newVersion', NEW_VERSION_2)
+        project.ext.set('pushRelease', "false")
+
+        ReleaseStartTask releaseStartTask = project.tasks.findByName(JGitflowPlugin.RELEASE_START_TASK_NAME)
+        ReleaseFinishTask releaseFinishTask = project.tasks.findByName(JGitflowPlugin.RELEASE_FINISH_TASK_NAME)
+
+        loadGradleProperties()
+
+        expect:
+        releaseStartTask != null
+        releaseFinishTask != null
+        gradleProperties.version == NEW_VERSION_1
+
+        when:
+        // we wrap the releaseStart with sleeping for one second, because otherwise the timestamps of the commits
+        // for the releaseStart and releaseFinish can be the same which can lead to a random order in the log.
+        // Since we are using the log to assert that our test passes, random ordering can cause our tests to fail.
+        // In practical usage, there will be time between a releaseStart and releaseFinish, so adding time between
+        // these calls is acceptable.
+        Thread.sleep(1000)
+        releaseStartTask.execute()
+        loadGradleProperties()
+        Thread.sleep(1000)
+
+        then:
+        notThrown(Throwable)
+        gradleProperties.version == RELEASE_VERSION_2
+
+        when:
+        releaseFinishTask.execute()
+        loadGradleProperties()
+
+        List<RevCommit> remoteMasterLog = log(remoteGit, jGitFlow.masterBranchName, 2)
+        //dumpLogs(remoteMasterLog, jGitFlow.masterBranchName)
+        List<RevCommit> remoteDevelopLog = log(remoteGit, jGitFlow.developBranchName, 3)
+        //dumpLogs(remoteDevelopLog, jGitFlow.developBranchName)
+        List<RevCommit> localMasterLog = log(localGit, jGitFlow.masterBranchName, 2)
+        //dumpLogs(localMasterLog, jGitFlow.masterBranchName)
+        List<RevCommit> localDevelopLog = log(localGit, jGitFlow.developBranchName, 3)
+        //dumpLogs(localDevelopLog, jGitFlow.developBranchName)
+
+        then:
+        notThrown(Throwable)
+        gradleProperties.version == NEW_VERSION_2
+        // check the remote git logs. We should not have a record of the changes for this release because we did not push
+        remoteMasterLog.get(0).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_1}'"
+        remoteMasterLog.get(1).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_1} release"
+        remoteDevelopLog.get(0).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_1}'"
+        remoteDevelopLog.get(1).fullMessage == "Merge branch '${jGitFlow.masterBranchName}' into ${jGitFlow.developBranchName}"
+        remoteDevelopLog.get(2).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_1}'"
+        // check the local git logs. We should have a record of the changes for this release
+        localMasterLog.get(0).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_2}'"
+        localMasterLog.get(1).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_2} release"
+        localDevelopLog.get(0).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_2}'"
+        localDevelopLog.get(1).fullMessage == "Merge branch '${jGitFlow.masterBranchName}' into ${jGitFlow.developBranchName}"
+        localDevelopLog.get(2).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_2}'"
+    }
+
+    def "Test ReleaseFinishTask WithPushReleasesNotSet" () {
+        setup:
+        project.ext.set('releaseVersion', RELEASE_VERSION_3)
+        project.ext.set('newVersion', NEW_VERSION_3)
+
+        ReleaseStartTask releaseStartTask = project.tasks.findByName(JGitflowPlugin.RELEASE_START_TASK_NAME)
+        ReleaseFinishTask releaseFinishTask = project.tasks.findByName(JGitflowPlugin.RELEASE_FINISH_TASK_NAME)
+
+        loadGradleProperties()
+
+        expect:
+        releaseStartTask != null
+        releaseFinishTask != null
+        gradleProperties.version == NEW_VERSION_2
+
+        when:
+        // we wrap the releaseStart with sleeping for one second, because otherwise the timestamps of the commits
+        // for the releaseStart and releaseFinish can be the same which can lead to a random order in the log.
+        // Since we are using the log to assert that our test passes, random ordering can cause our tests to fail.
+        // In practical usage, there will be time between a releaseStart and releaseFinish, so adding time between
+        // these calls is acceptable.
+        Thread.sleep(1000)
+        releaseStartTask.execute()
+        loadGradleProperties()
+        Thread.sleep(1000)
+
+        then:
+        notThrown(Throwable)
+        gradleProperties.version == RELEASE_VERSION_3
+
+        when:
+        releaseFinishTask.execute()
+        loadGradleProperties()
+        List<RevCommit> remoteMasterLog = log(remoteGit, jGitFlow.masterBranchName, 2)
+        //dumpLogs(remoteMasterLog, jGitFlow.masterBranchName)
+        List<RevCommit> remoteDevelopLog = log(remoteGit, jGitFlow.developBranchName, 3)
+        //dumpLogs(remoteDevelopLog, jGitFlow.developBranchName)
+
+        then:
+        notThrown(Throwable)
+        gradleProperties.version == NEW_VERSION_3
+        remoteMasterLog.get(0).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_3}'"
+        remoteMasterLog.get(1).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_3} release"
+        remoteDevelopLog.get(0).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_3}'"
+        remoteDevelopLog.get(1).fullMessage == "Merge branch '${jGitFlow.masterBranchName}' into ${jGitFlow.developBranchName}"
+        remoteDevelopLog.get(2).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_3}'"
     }
 }
