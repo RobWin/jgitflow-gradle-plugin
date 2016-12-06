@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright 2015 Robert Winkler
+ *  Copyright 2016 Robert Winkler
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -33,9 +33,9 @@ class ReleaseFinishTask extends DefaultTask {
     void finish(){
         String releaseVersion = project.property('releaseVersion')
         String newVersion = project.property('newVersion')
-        boolean pushRelease = true;
+        boolean pushRelease = true
         if (project.properties.containsKey('pushRelease')) {
-            pushRelease = Boolean.valueOf(project.property('pushRelease'))
+            pushRelease = Boolean.valueOf(project.property('pushRelease') as String)
         }
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
@@ -44,13 +44,13 @@ class ReleaseFinishTask extends DefaultTask {
         {
             if (mergeResult.masterHasProblems())
             {
-                logger.error("Error merging into " + flow.getMasterBranchName() + ":");
+                logger.error("Error merging into " + flow.getMasterBranchName() + ":")
                 logger.error(mergeResult.getMasterResult().toString());
             }
 
             if (mergeResult.developHasProblems())
             {
-                logger.error("Error merging into " + flow.getDevelopBranchName() + ":");
+                logger.error("Error merging into " + flow.getDevelopBranchName() + ":")
                 logger.error(mergeResult.getDevelopResult().toString());
             }
             throw new GradleException("Error while merging release!");

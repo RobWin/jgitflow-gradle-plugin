@@ -33,3 +33,6 @@
 
 === Version 0.3.2
 * Bugfix: Added tests and added missing close statements.
+
+== Version 0.4.0
+* Issue #13: Implemented an option to disable pushing commits in releaseFinish task
