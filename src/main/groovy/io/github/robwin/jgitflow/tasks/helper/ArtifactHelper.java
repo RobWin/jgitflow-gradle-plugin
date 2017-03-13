@@ -18,6 +18,8 @@
  */
 package io.github.robwin.jgitflow.tasks.helper;
 
+import com.github.zafarkhaja.semver.Version;
+
 import java.util.regex.Pattern;
 
 public class ArtifactHelper {
@@ -37,6 +39,17 @@ public class ArtifactHelper {
         }
 
         return false;
+    }
+
+    public static String removeSnapshot(String version) {
+        return Version.valueOf(version).getNormalVersion();
+    }
+
+    public static String newSnapshotVersion(String releaseVersion) {
+        return Version.valueOf(releaseVersion)
+                .incrementPatchVersion()
+                .setPreReleaseVersion(SNAPSHOT_VERSION)
+                .toString();
     }
 
 }

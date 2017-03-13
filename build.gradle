@@ -44,6 +44,7 @@ dependencies {
     compile gradleApi()
     compile localGroovy()
     compile 'external.atlassian.jgitflow:jgit-flow-core:1.0-m5.1'
+    compile 'com.github.zafarkhaja:java-semver:0.9.0'
     testCompile("org.spockframework:spock-core:1.0-groovy-2.4") {
         exclude group: "org.codehaus.groovy"
     }

@@ -33,7 +33,7 @@ class ReleaseStartTask extends DefaultTask {
     @TaskAction
     void start(){
 
-        String releaseVersion = project.property('releaseVersion')
+        String releaseVersion = project.properties['releaseVersion']?:loadVersionFromGradleProperties()
         CredentialsProviderHelper.setupCredentialProvider(project)
 
         validateReleaseVersion(releaseVersion)
@@ -67,6 +67,13 @@ class ReleaseStartTask extends DefaultTask {
         commitGradlePropertiesFile(flow.git(), "[JGitFlow Gradle Plugin] Updated gradle.properties for v" + releaseVersion + " release")
 
         flow.git().close()
+    }
+
+    private String loadVersionFromGradleProperties() {
+        if(!project.hasProperty('version')) {
+            throw new GradleException('version or releaseVersion property have to be present')
+        }
+        ArtifactHelper.removeSnapshot(project.property('version') as String)
     }
 
     private void validateReleaseVersion(String releaseVersion) {
