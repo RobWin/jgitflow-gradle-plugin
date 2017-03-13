@@ -20,6 +20,7 @@ package io.github.robwin.jgitflow.tasks
 import com.atlassian.jgitflow.core.JGitFlow
 import com.atlassian.jgitflow.core.ReleaseMergeResult
 import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
+import io.github.robwin.jgitflow.tasks.helper.ArtifactHelper
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
@@ -31,8 +32,8 @@ class ReleaseFinishTask extends DefaultTask {
 
     @TaskAction
     void finish(){
-        String releaseVersion = project.property('releaseVersion')
-        String newVersion = project.property('newVersion')
+        String releaseVersion = project.properties['releaseVersion']?:loadVersionFromGradleProperties()
+        String newVersion = project.properties['newVersion']?:ArtifactHelper.newSnapshotVersion(releaseVersion)
         boolean pushRelease = true
         if (project.properties.containsKey('pushRelease')) {
             pushRelease = Boolean.valueOf(project.property('pushRelease') as String)
@@ -68,5 +69,13 @@ class ReleaseFinishTask extends DefaultTask {
         }
 
         flow.git().close()
+    }
+
+
+    private String loadVersionFromGradleProperties() {
+        if(!project.hasProperty('version')) {
+            throw new GradleException('version or releaseVersion property have to be present')
+        }
+        ArtifactHelper.removeSnapshot(project.property('version') as String)
     }
 }
