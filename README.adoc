@@ -101,7 +101,7 @@ The task exposes a few properties as part of its configuration.
 [options="header"]
 |===
 |Mandatory |Property | Description | Type | Default
-|Yes |releaseVersion | The version of the release |  String | empty
+|No |releaseVersion | The version of the release. If not set, version will be taken from gradle.properties ('version' property with stripped SNAPSHOT postfix) |  String | empty
 |No |allowSnapshotDependencies| Allow snapshot library dependencies | Boolean| false
 |No |baseCommit| You can optionally supply a base commit sha-1 hash to start the release from. The commit must be on the develop branch. | String| empty
 |===
@@ -110,6 +110,7 @@ The task exposes a few properties as part of its configuration.
 
 The tasks should be invoked via a command line.
 
+`gradlew releaseStart`
 `gradlew releaseStart -PreleaseVersion=1.0.0`
 
 === Release Finish Task
@@ -118,8 +119,8 @@ The tasks should be invoked via a command line.
 [options="header"]
 |===
 |Mandatory |Property | Description | Type | Default
-|Yes |releaseVersion | The version of the release |  String | empty
-|Yes |newVersion | The new version of the develop branch |  String | empty
+|No |releaseVersion | The version of the release. If not set, version will be taken from gradle.properties ('version' property with stripped SNAPSHOT postfix) |  String | empty
+|No |newVersion | The new version of the develop branch. If not set then releaseVersion with incremented patch part and SNAPSHOT postfix (http://semver.org/) |  String | empty
 |Yes |pushRelease | A flag indicating whether or not the finished release should be pushed to remote |  boolean | true
 |===
 
@@ -127,6 +128,8 @@ The tasks should be invoked via a command line.
 
 The tasks should be invoked via a command line.
 
+`gradlew releaseFinish
+`gradlew releaseFinish -PreleaseVersion=1.0.0
 `gradlew releaseFinish -PreleaseVersion=1.0.0 -PnewVersion=1.0.1-SNAPSHOT`
 `gradlew releaseFinish -PreleaseVersion=1.0.0 -PnewVersion=1.0.1-SNAPSHOT -PpushRelease=true`
 `gradlew releaseFinish -PreleaseVersion=1.0.0 -PnewVersion=1.0.1-SNAPSHOT -PpushRelease=false`
