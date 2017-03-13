@@ -36,3 +36,6 @@
 
 == Version 0.4.0
 * Issue #13: Implemented an option to disable pushing commits in releaseFinish task
+
+== Version 0.5.0
+* Added automatic version detection and incrementation for release tasks
