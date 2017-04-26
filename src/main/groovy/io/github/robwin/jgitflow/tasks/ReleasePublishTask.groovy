@@ -20,13 +20,19 @@ package io.github.robwin.jgitflow.tasks
 import com.atlassian.jgitflow.core.JGitFlow
 import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
 import org.gradle.api.DefaultTask
+import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 
 class ReleasePublishTask extends DefaultTask {
 
     @TaskAction
     void publish(){
-        String releaseVersion = project.property('releaseVersion')
+        String releaseVersion = project.properties['releaseVersion']?:project.properties['version']
+
+        if (releaseVersion == null) {
+            throw new GradleException('version or releaseVersion property have to be present')
+        }
+
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
         flow.releasePublish(releaseVersion).call();
