@@ -44,10 +44,12 @@ class ReleaseStartTask extends DefaultTask {
         flow.git().checkout().setName(flow.getDevelopBranchName()).call()
 
         String allowSnapshotDependencies = project.hasProperty('allowSnapshotDependencies') ? project.property('allowSnapshotDependencies') : false
+        //Configuration property for
+        String allowProjectGroupSnapshotDependencies = project.hasProperty('allowProjectGroupSnapshotDependencies') ? project.property('allowProjectGroupSnapshotDependencies') : true
 
         if (!allowSnapshotDependencies) {
             //Check that no library dependency is a snapshot
-            checkThatNoDependencyIsASnapshot()
+            checkThatNoDependencyIsASnapshot(allowProjectGroupSnapshotDependencies)
         }
 
         //Start a release
@@ -85,12 +87,12 @@ class ReleaseStartTask extends DefaultTask {
         }
     }
 
-    private void checkThatNoDependencyIsASnapshot() {
+    private void checkThatNoDependencyIsASnapshot(String allowProjectGroupSnapshotDependencies) {
         def snapshotDependencies = [] as Set
         project.allprojects.each { project ->
             project.configurations.each { configuration ->
                 configuration.allDependencies.each { Dependency dependency ->
-                    if (!dependency.group.equals(project.group) && ArtifactHelper.isSnapshot(dependency.version)) {
+                    if ((!allowProjectGroupSnapshotDependencies || !dependency.group.equals(project.group)) && ArtifactHelper.isSnapshot(dependency.version)) {
                         snapshotDependencies.add("${dependency.group}:${dependency.name}:${dependency.version}")
                     }
                 }
