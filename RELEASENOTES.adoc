@@ -39,3 +39,6 @@
 
 == Version 0.5.0
 * Added automatic version detection and incrementation for release tasks
+
+== Version 0.6.0
+* Updated jgitflow-core library
