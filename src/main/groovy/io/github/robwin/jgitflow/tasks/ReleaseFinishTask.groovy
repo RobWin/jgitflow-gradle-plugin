@@ -40,6 +40,25 @@ class ReleaseFinishTask extends DefaultTask {
         }
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
+
+        // adding scmMessagePrefix into release start task
+        String scmMessagePrefix
+        if (project.hasProperty('scmMessagePrefix')) {
+            scmMessagePrefix = project.property('scmMessagePrefix')
+            flow.releaseFinish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
+        }else{
+            scmMessagePrefix = ""
+        }
+
+        // adding scmMessageSuffix into release start task
+        String scmMessageSuffix
+        if (project.hasProperty('scmMessageSuffix')) {
+            scmMessageSuffix = project.property('scmMessageSuffix')
+            flow.releaseFinish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
+        }else{
+            scmMessageSuffix = ""
+        }
+
         ReleaseMergeResult mergeResult = flow.releaseFinish(releaseVersion).call();
         if (!mergeResult.wasSuccessful())
         {
@@ -62,7 +81,7 @@ class ReleaseFinishTask extends DefaultTask {
         updateGradlePropertiesFile(project, newVersion)
 
         //Commit the release version
-        commitGradlePropertiesFile(flow.git(), "[JGitFlow Gradle Plugin] Updated gradle.properties to version '${newVersion}'")
+        commitGradlePropertiesFile(flow.git(), scmMessagePrefix + " [JGitFlow Gradle Plugin] Updated gradle.properties to version '${newVersion}' " +scmMessageSuffix )
 
         if (pushRelease) {
             flow.git().push().setPushAll().setPushTags().call();
