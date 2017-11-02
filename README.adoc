@@ -104,6 +104,8 @@ The task exposes a few properties as part of its configuration.
 |No |releaseVersion | The version of the release. If not set, version will be taken from gradle.properties ('version' property with stripped SNAPSHOT postfix) |  String | empty
 |No |allowSnapshotDependencies| Allow snapshot library dependencies | Boolean| false
 |No |baseCommit| You can optionally supply a base commit sha-1 hash to start the release from. The commit must be on the develop branch. | String| empty
+|No |scmMessagePrefix| You can optionally supply a SCM Prefix. | String| empty
+|No |scmMessageSuffix| You can optionally supply a SCM Suffix. | String| empty
 |===
 
 ==== Example
@@ -122,6 +124,8 @@ The tasks should be invoked via a command line.
 |No |releaseVersion | The version of the release. If not set, version will be taken from gradle.properties ('version' property with stripped SNAPSHOT postfix) |  String | empty
 |No |newVersion | The new version of the develop branch. If not set then releaseVersion with incremented patch part and SNAPSHOT postfix (http://semver.org/) |  String | empty
 |Yes |pushRelease | A flag indicating whether or not the finished release should be pushed to remote |  boolean | true
+|No |scmMessagePrefix| You can optionally supply a SCM Prefix. | String| empty
+|No |scmMessageSuffix| You can optionally supply a SCM Suffix. | String| empty
 |===
 
 ==== Example

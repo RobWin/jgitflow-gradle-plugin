@@ -54,10 +54,29 @@ class ReleaseStartTask extends DefaultTask {
 
         //Start a release
         def command = flow.releaseStart(releaseVersion)
+        // adding scmMessagePrefix into release start task
+        String scmMessagePrefix
+        if (project.hasProperty('scmMessagePrefix')) {
+            scmMessagePrefix = project.property('scmMessagePrefix')
+            command.setScmMessagePrefix(scmMessagePrefix)
+        }else{
+            scmMessagePrefix = ""
+        }
+
+        // adding scmMessageSuffix into release start task
+        String scmMessageSuffix
+        if (project.hasProperty('scmMessageSuffix')) {
+            scmMessageSuffix = project.property('scmMessageSuffix')
+            command.setScmMessageSuffix(scmMessageSuffix)
+        }else{
+            scmMessageSuffix = ""
+        }
+
         if (project.hasProperty('baseCommit')) {
             String baseCommit = project.property('baseCommit')
             command.setStartCommit(baseCommit)
         }
+
         command.call()
 
         //Local working copy is now on release branch
@@ -66,7 +85,7 @@ class ReleaseStartTask extends DefaultTask {
         updateGradlePropertiesFile(project, releaseVersion)
 
         //Commit the release version
-        commitGradlePropertiesFile(flow.git(), "[JGitFlow Gradle Plugin] Updated gradle.properties for v" + releaseVersion + " release")
+        commitGradlePropertiesFile(flow.git(),  scmMessagePrefix + " [JGitFlow Gradle Plugin] Updated gradle.properties for v" + releaseVersion + " release " + scmMessageSuffix)
 
         flow.git().close()
     }
