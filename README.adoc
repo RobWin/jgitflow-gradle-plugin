@@ -147,6 +147,8 @@ The task exposes a few properties as part of its configuration.
 |===
 |Mandatory |Property | Description | Type | Default
 |Yes |featureName | The name of the feature |  String | empty
+|No |scmMessagePrefix| You can optionally supply a SCM Prefix. | String| empty
+|No |scmMessageSuffix| You can optionally supply a SCM Suffix. | String| empty
 |===
 
 ==== Example
@@ -162,6 +164,8 @@ The tasks should be invoked via a command line.
 |===
 |Mandatory |Property | Description | Type | Default
 |Yes |featureName | The name of the feature |  String | empty
+|No |scmMessagePrefix| You can optionally supply a SCM Prefix. | String| empty
+|No |scmMessageSuffix| You can optionally supply a SCM Suffix. | String| empty
 |===
 
 ==== Example
@@ -180,6 +184,8 @@ The task exposes a few properties as part of its configuration.
 |Mandatory |Property | Description | Type | Default
 |Yes |hotfixName | The name of the hotfix |  String | empty
 |No |baseCommit| You can optionally supply a base commit sha-1 hash to start the hotfix from. The commit must be on the master branch. | String| empty
+|No |scmMessagePrefix| You can optionally supply a SCM Prefix. | String| empty
+|No |scmMessageSuffix| You can optionally supply a SCM Suffix. | String| empty
 |===
 
 ==== Example
@@ -195,6 +201,8 @@ The tasks should be invoked via a command line.
 |===
 |Mandatory |Property | Description | Type | Default
 |Yes |hotfixName | The name of the hotfix |  String | empty
+|No |scmMessagePrefix| You can optionally supply a SCM Prefix. | String| empty
+|No |scmMessageSuffix| You can optionally supply a SCM Suffix. | String| empty
 |===
 
 ==== Example
