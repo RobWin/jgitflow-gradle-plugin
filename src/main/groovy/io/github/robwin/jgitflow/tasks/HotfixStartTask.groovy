@@ -36,6 +36,26 @@ class HotfixStartTask extends DefaultTask {
             String baseCommit = project.property('baseCommit')
             command.setStartCommit(baseCommit)
         }
+
+        // adding scmMessagePrefix into hotfix start task
+        String scmMessagePrefix
+        if (project.hasProperty('scmMessagePrefix')) {
+            scmMessagePrefix = project.property('scmMessagePrefix')
+            command.setScmMessagePrefix(scmMessagePrefix)
+        }else{
+            scmMessagePrefix = "[JGitFlow Gradle Plugin]"
+            command.setScmMessagePrefix(scmMessagePrefix)
+        }
+
+        // adding scmMessageSuffix into hotfix start task
+        String scmMessageSuffix
+        if (project.hasProperty('scmMessageSuffix')) {
+            scmMessageSuffix = project.property('scmMessageSuffix')
+            command.setScmMessageSuffix(scmMessageSuffix)
+        }else{
+            scmMessageSuffix = "[JGitFlow Gradle Plugin]"
+            command.setScmMessageSuffix(scmMessageSuffix)
+        }
         command.call()
 
         flow.git().close()

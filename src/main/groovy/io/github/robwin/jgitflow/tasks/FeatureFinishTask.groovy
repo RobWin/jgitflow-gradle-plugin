@@ -31,6 +31,27 @@ class FeatureFinishTask extends DefaultTask {
         String featureName = project.property('featureName')
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
+
+        // adding scmMessagePrefix into feature finish task
+        String scmMessagePrefix
+        if (project.hasProperty('scmMessagePrefix')) {
+            scmMessagePrefix = project.property('scmMessagePrefix')
+            flow.featureFinish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
+        }else{
+            scmMessagePrefix = "[JGitFlow Gradle Plugin]"
+            flow.featureFinish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
+        }
+
+        // adding scmMessageSuffix into feature finish task
+        String scmMessageSuffix
+        if (project.hasProperty('scmMessageSuffix')) {
+            scmMessageSuffix = project.property('scmMessageSuffix')
+            flow.featureFinish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
+        }else{
+            scmMessageSuffix = "[JGitFlow Gradle Plugin]"
+            flow.featureFinish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
+        }
+
         MergeResult mergeResult = flow.featureFinish(featureName).call();
         if (!mergeResult.getMergeStatus().isSuccessful())
         {

@@ -212,8 +212,8 @@ class JGitflowTaskSpec extends Specification{
         notThrown(Throwable)
         gradleProperties.version == NEW_VERSION_1
         remoteMasterLog.get(0).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_1}'"
-        remoteMasterLog.get(1).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_1} release"
-        remoteDevelopLog.get(0).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_1}'"
+        remoteMasterLog.get(1).fullMessage.indexOf("Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_1} release") > 0
+        remoteDevelopLog.get(0).fullMessage.indexOf("Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_1}'") > 0
         remoteDevelopLog.get(1).fullMessage == "Merge branch '${jGitFlow.masterBranchName}' into ${jGitFlow.developBranchName}"
         remoteDevelopLog.get(2).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_1}'"
     }
@@ -267,14 +267,14 @@ class JGitflowTaskSpec extends Specification{
         gradleProperties.version == NEW_VERSION_2
         // check the remote git logs. We should not have a record of the changes for this release because we did not push
         remoteMasterLog.get(0).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_1}'"
-        remoteMasterLog.get(1).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_1} release"
-        remoteDevelopLog.get(0).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_1}'"
+        remoteMasterLog.get(1).fullMessage.indexOf("Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_1} release") > 0
+        remoteDevelopLog.get(0).fullMessage.indexOf("Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_1}'") > 0
         remoteDevelopLog.get(1).fullMessage == "Merge branch '${jGitFlow.masterBranchName}' into ${jGitFlow.developBranchName}"
         remoteDevelopLog.get(2).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_1}'"
         // check the local git logs. We should have a record of the changes for this release
         localMasterLog.get(0).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_2}'"
-        localMasterLog.get(1).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_2} release"
-        localDevelopLog.get(0).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_2}'"
+        localMasterLog.get(1).fullMessage.indexOf("Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_2} release") > 0
+        localDevelopLog.get(0).fullMessage.indexOf("Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_2}'") > 0
         localDevelopLog.get(1).fullMessage == "Merge branch '${jGitFlow.masterBranchName}' into ${jGitFlow.developBranchName}"
         localDevelopLog.get(2).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_2}'"
     }
@@ -321,8 +321,8 @@ class JGitflowTaskSpec extends Specification{
         notThrown(Throwable)
         gradleProperties.version == NEW_VERSION_3
         remoteMasterLog.get(0).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_3}'"
-        remoteMasterLog.get(1).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_3} release"
-        remoteDevelopLog.get(0).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_3}'"
+        remoteMasterLog.get(1).fullMessage.indexOf("Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_3} release") > 0
+        remoteDevelopLog.get(0).fullMessage.indexOf("Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_3}'") > 0
         remoteDevelopLog.get(1).fullMessage == "Merge branch '${jGitFlow.masterBranchName}' into ${jGitFlow.developBranchName}"
         remoteDevelopLog.get(2).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_3}'"
     }
@@ -369,8 +369,8 @@ class JGitflowTaskSpec extends Specification{
         notThrown(Throwable)
         gradleProperties.version == NEW_VERSION_4
         remoteMasterLog.get(0).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_4}'"
-        remoteMasterLog.get(1).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_4} release"
-        remoteDevelopLog.get(0).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_4}'"
+        remoteMasterLog.get(1).fullMessage.indexOf("Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_4} release") > 0
+        remoteDevelopLog.get(0).fullMessage.indexOf("Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_4}'") > 0
         remoteDevelopLog.get(1).fullMessage == "Merge branch '${jGitFlow.masterBranchName}' into ${jGitFlow.developBranchName}"
         remoteDevelopLog.get(2).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_4}'"
     }
@@ -418,8 +418,8 @@ class JGitflowTaskSpec extends Specification{
         notThrown(Throwable)
         gradleProperties.version == NEW_VERSION_5
         remoteMasterLog.get(0).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_5}'"
-        remoteMasterLog.get(1).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_5} release"
-        remoteDevelopLog.get(0).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_5}'"
+        remoteMasterLog.get(1).fullMessage.indexOf("Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_5} release") > 0
+        remoteDevelopLog.get(0).fullMessage.indexOf("Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_5}'") > 0
         remoteDevelopLog.get(1).fullMessage == "Merge branch '${jGitFlow.masterBranchName}' into ${jGitFlow.developBranchName}"
         remoteDevelopLog.get(2).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_5}'"
     }
@@ -467,8 +467,8 @@ class JGitflowTaskSpec extends Specification{
         notThrown(Throwable)
         gradleProperties.version == NEW_VERSION_6
         remoteMasterLog.get(0).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_6}'"
-        remoteMasterLog.get(1).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_6} release"
-        remoteDevelopLog.get(0).fullMessage == "[JGitFlow Gradle Plugin] Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_6}'"
+        remoteMasterLog.get(1).fullMessage.indexOf("Updated ${Project.GRADLE_PROPERTIES} for v${RELEASE_VERSION_6} release") > 0
+        remoteDevelopLog.get(0).fullMessage.indexOf("Updated ${Project.GRADLE_PROPERTIES} to version '${NEW_VERSION_6}'") > 0
         remoteDevelopLog.get(1).fullMessage == "Merge branch '${jGitFlow.masterBranchName}' into ${jGitFlow.developBranchName}"
         remoteDevelopLog.get(2).fullMessage == "Merge branch '${jGitFlow.releaseBranchPrefix}${RELEASE_VERSION_6}'"
     }

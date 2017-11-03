@@ -29,6 +29,27 @@ class FeatureStartTask extends DefaultTask {
         String featureName = project.property('featureName')
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
+
+        // adding scmMessagePrefix into feature start task
+        String scmMessagePrefix
+        if (project.hasProperty('scmMessagePrefix')) {
+            scmMessagePrefix = project.property('scmMessagePrefix')
+            flow.featureStart(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
+        }else{
+            scmMessagePrefix = "[JGitFlow Gradle Plugin]"
+            flow.featureStart(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
+        }
+
+        // adding scmMessageSuffix into feature start task
+        String scmMessageSuffix
+        if (project.hasProperty('scmMessageSuffix')) {
+            scmMessageSuffix = project.property('scmMessageSuffix')
+            flow.featureStart(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
+        }else{
+            scmMessageSuffix = "[JGitFlow Gradle Plugin]"
+            flow.featureStart(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
+        }
+
         flow.featureStart(featureName).call();
         flow.git().close()
     }
