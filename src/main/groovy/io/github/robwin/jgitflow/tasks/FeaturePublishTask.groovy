@@ -29,6 +29,27 @@ class FeaturePublishTask extends DefaultTask {
         String featureName = project.property('featureName')
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
+
+        // adding scmMessagePrefix into feature publish task
+        String scmMessagePrefix
+        if (project.hasProperty('scmMessagePrefix')) {
+            scmMessagePrefix = project.property('scmMessagePrefix')
+            flow.featurePublish(featureName).setScmMessagePrefix(scmMessagePrefix)
+        }else{
+            scmMessagePrefix = "[Gradle Plugin PREFIX]"
+            flow.featurePublish(featureName).setScmMessagePrefix(scmMessagePrefix)
+        }
+
+        // adding scmMessageSuffix into feature finish task
+        String scmMessageSuffix
+        if (project.hasProperty('scmMessageSuffix')) {
+            scmMessageSuffix = project.property('scmMessageSuffix')
+            flow.featurePublish(featureName).setScmMessageSuffix(scmMessageSuffix)
+        }else{
+            scmMessageSuffix = "[Gradle Plugin SUFFIX]"
+            flow.featurePublish(featureName).setScmMessageSuffix(scmMessageSuffix)
+        }
+
         flow.featurePublish(featureName).setPush(true).call();
         flow.git().close()
     }

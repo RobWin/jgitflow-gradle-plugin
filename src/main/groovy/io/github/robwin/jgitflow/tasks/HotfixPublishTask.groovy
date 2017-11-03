@@ -29,6 +29,27 @@ class HotfixPublishTask extends DefaultTask {
         String hotfixName = project.property('hotfixName')
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
+
+        // adding scmMessagePrefix into hotfix publish task
+        String scmMessagePrefix
+        if (project.hasProperty('scmMessagePrefix')) {
+            scmMessagePrefix = project.property('scmMessagePrefix')
+            flow.hotfixPublish(hotfixName).setScmMessagePrefix(scmMessagePrefix)
+        }else{
+            scmMessagePrefix = "[Gradle Plugin PREFIX]"
+            flow.hotfixPublish(hotfixName).setScmMessagePrefix(scmMessagePrefix)
+        }
+
+        // adding scmMessageSuffix into hotfix finish task
+        String scmMessageSuffix
+        if (project.hasProperty('scmMessageSuffix')) {
+            scmMessageSuffix = project.property('scmMessageSuffix')
+            flow.hotfixPublish(hotfixName).setScmMessageSuffix(scmMessageSuffix)
+        }else{
+            scmMessageSuffix = "[Gradle Plugin SUFFIX]"
+            flow.hotfixPublish(hotfixName).setScmMessageSuffix(scmMessageSuffix)
+        }
+
         flow.hotfixPublish(hotfixName).call();
         flow.git().close()
     }

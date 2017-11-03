@@ -47,7 +47,7 @@ class ReleaseFinishTask extends DefaultTask {
             scmMessagePrefix = project.property('scmMessagePrefix')
             flow.releaseFinish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
         }else{
-            scmMessagePrefix = "[JGitFlow Gradle Plugin]"
+            scmMessagePrefix = "[Gradle Plugin PREFIX]"
             flow.releaseFinish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
         }
 
@@ -57,7 +57,7 @@ class ReleaseFinishTask extends DefaultTask {
             scmMessageSuffix = project.property('scmMessageSuffix')
             flow.releaseFinish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
         }else{
-            scmMessageSuffix = "[JGitFlow Gradle Plugin]"
+            scmMessageSuffix = "[Gradle Plugin SUFFIX]"
             flow.releaseFinish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
         }
 

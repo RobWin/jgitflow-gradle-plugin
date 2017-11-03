@@ -35,6 +35,27 @@ class ReleasePublishTask extends DefaultTask {
 
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
+
+        // adding scmMessagePrefix into release publish task
+        String scmMessagePrefix
+        if (project.hasProperty('scmMessagePrefix')) {
+            scmMessagePrefix = project.property('scmMessagePrefix')
+            flow.releasePublish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
+        }else{
+            scmMessagePrefix = "[Gradle Plugin PREFIX]"
+            flow.releasePublish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
+        }
+
+        // adding scmMessageSuffix into publish finish task
+        String scmMessageSuffix
+        if (project.hasProperty('scmMessageSuffix')) {
+            scmMessageSuffix = project.property('scmMessageSuffix')
+            flow.releasePublish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
+        }else{
+            scmMessageSuffix = "[Gradle Plugin SUFFIX]"
+            flow.releasePublish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
+        }
+
         flow.releasePublish(releaseVersion).call();
         flow.git().close()
     }

@@ -38,7 +38,7 @@ class HotfixFinishTask extends DefaultTask {
             scmMessagePrefix = project.property('scmMessagePrefix')
             flow.hotfixFinish(hotfixName).setScmMessagePrefix(scmMessagePrefix)
         }else{
-            scmMessagePrefix = "[JGitFlow Gradle Plugin]"
+            scmMessagePrefix = "[Gradle Plugin PREFIX]"
             flow.hotfixFinish(hotfixName).setScmMessagePrefix(scmMessagePrefix)
         }
 
@@ -48,7 +48,7 @@ class HotfixFinishTask extends DefaultTask {
             scmMessageSuffix = project.property('scmMessageSuffix')
             flow.hotfixFinish(hotfixName).setScmMessageSuffix(scmMessageSuffix)
         }else{
-            scmMessageSuffix = "[JGitFlow Gradle Plugin]"
+            scmMessageSuffix = "[Gradle Plugin SUFFIX]"
             flow.hotfixFinish(hotfixName).setScmMessageSuffix(scmMessageSuffix)
         }
 
