@@ -34,20 +34,20 @@ class FeatureStartTask extends DefaultTask {
         String scmMessagePrefix
         if (project.hasProperty('scmMessagePrefix')) {
             scmMessagePrefix = project.property('scmMessagePrefix')
-            flow.featureStart(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
+            flow.featureStart(featureName).setScmMessagePrefix(scmMessagePrefix)
         }else{
-            scmMessagePrefix = "[JGitFlow Gradle Plugin]"
-            flow.featureStart(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
+            scmMessagePrefix = "[Gradle Plugin PREFIX]"
+            flow.featureStart(featureName).setScmMessagePrefix(scmMessagePrefix)
         }
 
         // adding scmMessageSuffix into feature start task
         String scmMessageSuffix
         if (project.hasProperty('scmMessageSuffix')) {
             scmMessageSuffix = project.property('scmMessageSuffix')
-            flow.featureStart(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
+            flow.featureStart(featureName).setScmMessageSuffix(scmMessageSuffix)
         }else{
-            scmMessageSuffix = "[JGitFlow Gradle Plugin]"
-            flow.featureStart(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
+            scmMessageSuffix = "[Gradle Plugin SUFFIX]"
+            flow.featureStart(featureName).setScmMessageSuffix(scmMessageSuffix)
         }
 
         flow.featureStart(featureName).call();

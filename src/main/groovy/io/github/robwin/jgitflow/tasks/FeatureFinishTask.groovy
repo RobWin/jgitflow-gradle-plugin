@@ -36,20 +36,20 @@ class FeatureFinishTask extends DefaultTask {
         String scmMessagePrefix
         if (project.hasProperty('scmMessagePrefix')) {
             scmMessagePrefix = project.property('scmMessagePrefix')
-            flow.featureFinish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
+            flow.featureFinish(featureName).setScmMessagePrefix(scmMessagePrefix)
         }else{
-            scmMessagePrefix = "[JGitFlow Gradle Plugin]"
-            flow.featureFinish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
+            scmMessagePrefix = "[Gradle Plugin PREFIX]"
+            flow.featureFinish(featureName).setScmMessagePrefix(scmMessagePrefix)
         }
 
         // adding scmMessageSuffix into feature finish task
         String scmMessageSuffix
         if (project.hasProperty('scmMessageSuffix')) {
             scmMessageSuffix = project.property('scmMessageSuffix')
-            flow.featureFinish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
+            flow.featureFinish(featureName).setScmMessageSuffix(scmMessageSuffix)
         }else{
-            scmMessageSuffix = "[JGitFlow Gradle Plugin]"
-            flow.featureFinish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
+            scmMessageSuffix = "[Gradle Plugin SUFFIX]"
+            flow.featureFinish(featureName).setScmMessageSuffix(scmMessageSuffix)
         }
 
         MergeResult mergeResult = flow.featureFinish(featureName).call();
