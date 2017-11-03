@@ -31,6 +31,27 @@ class HotfixFinishTask extends DefaultTask {
         String hotfixName = project.property('hotfixName')
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
+
+        // adding scmMessagePrefix into hotfix finish task
+        String scmMessagePrefix
+        if (project.hasProperty('scmMessagePrefix')) {
+            scmMessagePrefix = project.property('scmMessagePrefix')
+            flow.hotfixFinish(hotfixName).setScmMessagePrefix(scmMessagePrefix)
+        }else{
+            scmMessagePrefix = "[JGitFlow Gradle Plugin]"
+            flow.hotfixFinish(hotfixName).setScmMessagePrefix(scmMessagePrefix)
+        }
+
+        // adding scmMessageSuffix into hotfix finish task
+        String scmMessageSuffix
+        if (project.hasProperty('scmMessageSuffix')) {
+            scmMessageSuffix = project.property('scmMessageSuffix')
+            flow.hotfixFinish(hotfixName).setScmMessageSuffix(scmMessageSuffix)
+        }else{
+            scmMessageSuffix = "[JGitFlow Gradle Plugin]"
+            flow.hotfixFinish(hotfixName).setScmMessageSuffix(scmMessageSuffix)
+        }
+
         ReleaseMergeResult mergeResult = flow.hotfixFinish(hotfixName).call();
         if (!mergeResult.wasSuccessful())
         {

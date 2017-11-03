@@ -58,18 +58,20 @@ class ReleaseStartTask extends DefaultTask {
         String scmMessagePrefix
         if (project.hasProperty('scmMessagePrefix')) {
             scmMessagePrefix = project.property('scmMessagePrefix')
-            command.setScmMessagePrefix(scmMessagePrefix)
+            flow.releaseFinish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
         }else{
-            scmMessagePrefix = ""
+            scmMessagePrefix = "[JGitFlow Gradle Plugin]"
+            flow.releaseFinish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
         }
 
         // adding scmMessageSuffix into release start task
         String scmMessageSuffix
         if (project.hasProperty('scmMessageSuffix')) {
             scmMessageSuffix = project.property('scmMessageSuffix')
-            command.setScmMessageSuffix(scmMessageSuffix)
+            flow.releaseFinish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
         }else{
-            scmMessageSuffix = ""
+            scmMessageSuffix = "[JGitFlow Gradle Plugin]"
+            flow.releaseFinish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
         }
 
         if (project.hasProperty('baseCommit')) {
@@ -85,7 +87,7 @@ class ReleaseStartTask extends DefaultTask {
         updateGradlePropertiesFile(project, releaseVersion)
 
         //Commit the release version
-        commitGradlePropertiesFile(flow.git(),  scmMessagePrefix + " [JGitFlow Gradle Plugin] Updated gradle.properties for v" + releaseVersion + " release " + scmMessageSuffix)
+        commitGradlePropertiesFile(flow.git(),  flow.releaseFinish(releaseVersion).getScmMessagePrefix() + " Updated gradle.properties for v" + releaseVersion + " release " + flow.releaseFinish(releaseVersion).getScmMessageSuffix())
 
         flow.git().close()
     }
