@@ -59,7 +59,7 @@ class ReleaseStartTask extends DefaultTask {
             command.setScmMessagePrefix(scmMessagePrefix)
         }else{
             scmMessagePrefix = "[Gradle Plugin PREFIX]"
-            command.setScmMessageSuffix(scmMessagePrefix)
+            command.setScmMessagePrefix(scmMessagePrefix)
         }
 
         // adding scmMessageSuffix into release start task
