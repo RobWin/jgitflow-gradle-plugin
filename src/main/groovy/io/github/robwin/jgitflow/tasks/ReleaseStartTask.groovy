@@ -20,7 +20,6 @@ package io.github.robwin.jgitflow.tasks
 import com.atlassian.jgitflow.core.JGitFlow
 import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
 import io.github.robwin.jgitflow.tasks.helper.ArtifactHelper
-import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.tasks.TaskAction
@@ -28,7 +27,7 @@ import org.gradle.api.tasks.TaskAction
 import static io.github.robwin.jgitflow.tasks.helper.GitHelper.commitGradlePropertiesFile
 import static io.github.robwin.jgitflow.tasks.helper.GitHelper.updateGradlePropertiesFile
 
-class ReleaseStartTask extends DefaultTask {
+class ReleaseStartTask extends AbstractCommandTask {
 
     @TaskAction
     void start(){
@@ -54,25 +53,8 @@ class ReleaseStartTask extends DefaultTask {
 
         //Start a release
         def command = flow.releaseStart(releaseVersion)
-        // adding scmMessagePrefix into release start task
-        String scmMessagePrefix
-        if (project.hasProperty('scmMessagePrefix')) {
-            scmMessagePrefix = project.property('scmMessagePrefix')
-            command.setScmMessagePrefix(scmMessagePrefix)
-        }else{
-            scmMessagePrefix = "[Gradle Plugin PREFIX]"
-            command.setScmMessagePrefix(scmMessagePrefix)
-        }
 
-        // adding scmMessageSuffix into release start task
-        String scmMessageSuffix
-        if (project.hasProperty('scmMessageSuffix')) {
-            scmMessageSuffix = project.property('scmMessageSuffix')
-            command.setScmMessageSuffix(scmMessageSuffix)
-        }else{
-            scmMessageSuffix = "[Gradle Plugin SUFFIX]"
-            command.setScmMessageSuffix(scmMessageSuffix)
-        }
+        setCommandPrefixAndSuffix(command)
 
         if (project.hasProperty('baseCommit')) {
             String baseCommit = project.property('baseCommit')
@@ -87,7 +69,7 @@ class ReleaseStartTask extends DefaultTask {
         updateGradlePropertiesFile(project, releaseVersion)
 
         //Commit the release version
-        commitGradlePropertiesFile(flow.git(),  command.getScmMessagePrefix() + " Updated gradle.properties for v" + releaseVersion + " release " + command.getScmMessageSuffix())
+        commitGradlePropertiesFile(flow.git(), getScmMessagePrefix(command) + "Updated gradle.properties for v" + releaseVersion + " release" + getScmMessageSuffix(command))
 
         flow.git().close()
     }

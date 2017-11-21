@@ -19,11 +19,10 @@
 package io.github.robwin.jgitflow.tasks
 import com.atlassian.jgitflow.core.JGitFlow
 import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
-import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 
-class ReleasePublishTask extends DefaultTask {
+class ReleasePublishTask extends AbstractCommandTask  {
 
     @TaskAction
     void publish(){
@@ -35,26 +34,9 @@ class ReleasePublishTask extends DefaultTask {
 
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
+        def command = flow.releasePublish(releaseVersion)
 
-        // adding scmMessagePrefix into release publish task
-        String scmMessagePrefix
-        if (project.hasProperty('scmMessagePrefix')) {
-            scmMessagePrefix = project.property('scmMessagePrefix')
-            flow.releasePublish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
-        }else{
-            scmMessagePrefix = "[Gradle Plugin PREFIX]"
-            flow.releasePublish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
-        }
-
-        // adding scmMessageSuffix into publish finish task
-        String scmMessageSuffix
-        if (project.hasProperty('scmMessageSuffix')) {
-            scmMessageSuffix = project.property('scmMessageSuffix')
-            flow.releasePublish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
-        }else{
-            scmMessageSuffix = "[Gradle Plugin SUFFIX]"
-            flow.releasePublish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
-        }
+        setCommandPrefixAndSuffix(command)
 
         flow.releasePublish(releaseVersion).call();
         flow.git().close()

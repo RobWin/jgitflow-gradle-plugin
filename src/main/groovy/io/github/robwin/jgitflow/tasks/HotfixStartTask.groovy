@@ -19,43 +19,25 @@
 package io.github.robwin.jgitflow.tasks
 import com.atlassian.jgitflow.core.JGitFlow
 import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
-import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-class HotfixStartTask extends DefaultTask {
+class HotfixStartTask extends AbstractCommandTask  {
 
     @TaskAction
     void start(){
         String hotfixName = project.property('hotfixName')
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
+        def command = flow.hotfixStart(hotfixName)
+
+        setCommandPrefixAndSuffix(command)
 
         //Start a hotfix
-        def command = flow.hotfixStart(hotfixName)
         if (project.hasProperty('baseCommit')) {
             String baseCommit = project.property('baseCommit')
             command.setStartCommit(baseCommit)
         }
 
-        // adding scmMessagePrefix into hotfix start task
-        String scmMessagePrefix
-        if (project.hasProperty('scmMessagePrefix')) {
-            scmMessagePrefix = project.property('scmMessagePrefix')
-            command.setScmMessagePrefix(scmMessagePrefix)
-        }else{
-            scmMessagePrefix = "[Gradle Plugin PREFIX]"
-            command.setScmMessagePrefix(scmMessagePrefix)
-        }
-
-        // adding scmMessageSuffix into hotfix start task
-        String scmMessageSuffix
-        if (project.hasProperty('scmMessageSuffix')) {
-            scmMessageSuffix = project.property('scmMessageSuffix')
-            command.setScmMessageSuffix(scmMessageSuffix)
-        }else{
-            scmMessageSuffix = "[Gradle Plugin SUFFIX]"
-            command.setScmMessageSuffix(scmMessageSuffix)
-        }
         command.call()
 
         flow.git().close()
