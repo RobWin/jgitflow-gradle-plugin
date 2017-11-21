@@ -21,14 +21,13 @@ import com.atlassian.jgitflow.core.JGitFlow
 import com.atlassian.jgitflow.core.ReleaseMergeResult
 import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
 import io.github.robwin.jgitflow.tasks.helper.ArtifactHelper
-import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 
 import static io.github.robwin.jgitflow.tasks.helper.GitHelper.commitGradlePropertiesFile
 import static io.github.robwin.jgitflow.tasks.helper.GitHelper.updateGradlePropertiesFile
 
-class ReleaseFinishTask extends DefaultTask {
+class ReleaseFinishTask extends AbstractCommandTask {
 
     @TaskAction
     void finish(){
@@ -40,28 +39,11 @@ class ReleaseFinishTask extends DefaultTask {
         }
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
+        def command = flow.releaseFinish(releaseVersion)
 
-        // adding scmMessagePrefix into release finish task
-        String scmMessagePrefix
-        if (project.hasProperty('scmMessagePrefix')) {
-            scmMessagePrefix = project.property('scmMessagePrefix')
-            flow.releaseFinish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
-        }else{
-            scmMessagePrefix = "[Gradle Plugin PREFIX]"
-            flow.releaseFinish(releaseVersion).setScmMessagePrefix(scmMessagePrefix)
-        }
+        setCommandPrefixAndSuffix(command)
 
-        // adding scmMessageSuffix into release finish task
-        String scmMessageSuffix
-        if (project.hasProperty('scmMessageSuffix')) {
-            scmMessageSuffix = project.property('scmMessageSuffix')
-            flow.releaseFinish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
-        }else{
-            scmMessageSuffix = "[Gradle Plugin SUFFIX]"
-            flow.releaseFinish(releaseVersion).setScmMessageSuffix(scmMessageSuffix)
-        }
-
-        ReleaseMergeResult mergeResult = flow.releaseFinish(releaseVersion).call();
+        ReleaseMergeResult mergeResult = command.call()
         if (!mergeResult.wasSuccessful())
         {
             if (mergeResult.masterHasProblems())
@@ -83,7 +65,7 @@ class ReleaseFinishTask extends DefaultTask {
         updateGradlePropertiesFile(project, newVersion)
 
         //Commit the release version
-        commitGradlePropertiesFile(flow.git(), flow.releaseFinish(releaseVersion).getScmMessagePrefix() + " Updated gradle.properties to version '${newVersion}' " +flow.releaseFinish(releaseVersion).getScmMessageSuffix())
+        commitGradlePropertiesFile(flow.git(), getScmMessagePrefix(command) + "Updated gradle.properties to version '${newVersion}'" + getScmMessageSuffix(command))
 
         if (pushRelease) {
             flow.git().push().setPushAll().setPushTags().call();

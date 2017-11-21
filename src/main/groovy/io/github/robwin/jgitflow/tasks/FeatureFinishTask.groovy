@@ -20,39 +20,21 @@ package io.github.robwin.jgitflow.tasks
 import com.atlassian.jgitflow.core.JGitFlow
 import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
 import org.eclipse.jgit.api.MergeResult
-import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
 
-class FeatureFinishTask extends DefaultTask {
+class FeatureFinishTask extends AbstractCommandTask  {
 
     @TaskAction
     void finish(){
         String featureName = project.property('featureName')
         CredentialsProviderHelper.setupCredentialProvider(project)
         JGitFlow flow = JGitFlow.get(project.rootProject.rootDir)
+        def command = flow.featureFinish(featureName)
 
-        // adding scmMessagePrefix into feature finish task
-        String scmMessagePrefix
-        if (project.hasProperty('scmMessagePrefix')) {
-            scmMessagePrefix = project.property('scmMessagePrefix')
-            flow.featureFinish(featureName).setScmMessagePrefix(scmMessagePrefix)
-        }else{
-            scmMessagePrefix = "[Gradle Plugin PREFIX]"
-            flow.featureFinish(featureName).setScmMessagePrefix(scmMessagePrefix)
-        }
+        setCommandPrefixAndSuffix(command)
 
-        // adding scmMessageSuffix into feature finish task
-        String scmMessageSuffix
-        if (project.hasProperty('scmMessageSuffix')) {
-            scmMessageSuffix = project.property('scmMessageSuffix')
-            flow.featureFinish(featureName).setScmMessageSuffix(scmMessageSuffix)
-        }else{
-            scmMessageSuffix = "[Gradle Plugin SUFFIX]"
-            flow.featureFinish(featureName).setScmMessageSuffix(scmMessageSuffix)
-        }
-
-        MergeResult mergeResult = flow.featureFinish(featureName).call();
+        MergeResult mergeResult = command.call()
         if (!mergeResult.getMergeStatus().isSuccessful())
         {
             getLogger().error("Error merging into " + flow.getDevelopBranchName() + ":");
