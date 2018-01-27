@@ -21,6 +21,7 @@ import com.atlassian.jgitflow.core.JGitFlow
 import io.github.robwin.jgitflow.tasks.credentialsprovider.CredentialsProviderHelper
 import io.github.robwin.jgitflow.tasks.helper.ArtifactHelper
 import org.gradle.api.GradleException
+import org.gradle.api.Project
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.tasks.TaskAction
 
@@ -78,7 +79,12 @@ class ReleaseStartTask extends AbstractCommandTask {
         if(!project.hasProperty('version')) {
             throw new GradleException('version or releaseVersion property have to be present')
         }
-        ArtifactHelper.removeSnapshot(project.property('version') as String)
+        String version = project.property('version') as String
+        if (version == "unspecified") {
+            throw new GradleException("Cannot get version property from ${Project.GRADLE_PROPERTIES}")
+        }
+        
+        ArtifactHelper.removeSnapshot(version)
     }
 
     private void validateReleaseVersion(String releaseVersion) {
