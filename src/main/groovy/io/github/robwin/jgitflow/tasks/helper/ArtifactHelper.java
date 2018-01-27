@@ -19,6 +19,7 @@
 package io.github.robwin.jgitflow.tasks.helper;
 
 import com.github.zafarkhaja.semver.Version;
+import org.gradle.api.GradleException;
 
 import java.util.regex.Pattern;
 
@@ -45,11 +46,28 @@ public class ArtifactHelper {
         return Version.valueOf(version).getNormalVersion();
     }
 
-    public static String newSnapshotVersion(String releaseVersion) {
-        return Version.valueOf(releaseVersion)
-                .incrementPatchVersion()
-                .setPreReleaseVersion(SNAPSHOT_VERSION)
-                .toString();
+    public static String newSnapshotVersion(String releaseVersion, String newVersionIncrement) {
+
+        switch (newVersionIncrement.toUpperCase()) {
+            case "PATCH":
+                return Version.valueOf(releaseVersion)
+                        .incrementPatchVersion()
+                        .setPreReleaseVersion(SNAPSHOT_VERSION)
+                        .toString();
+            case "MINOR":
+                return Version.valueOf(releaseVersion)
+                        .incrementMinorVersion()
+                        .setPreReleaseVersion(SNAPSHOT_VERSION)
+                        .toString();
+            case "MAJOR":
+                return Version.valueOf(releaseVersion)
+                        .incrementMajorVersion()
+                        .setPreReleaseVersion(SNAPSHOT_VERSION)
+                        .toString();
+            default:
+                throw new GradleException("Invalid value '" + newVersionIncrement + "' for newVersionIncrement Property");
+
+        }
     }
 
 }
