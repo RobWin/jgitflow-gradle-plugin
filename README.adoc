@@ -122,7 +122,8 @@ The tasks should be invoked via a command line.
 |===
 |Mandatory |Property | Description | Type | Default
 |No |releaseVersion | The version of the release. If not set, version will be taken from gradle.properties ('version' property with stripped SNAPSHOT postfix) |  String | empty
-|No |newVersion | The new version of the develop branch. If not set then releaseVersion with incremented patch part and SNAPSHOT postfix (http://semver.org/) |  String | empty
+|No |newVersion | The new version of the develop branch. If not set then releaseVersion with incremented version and SNAPSHOT postfix (http://semver.org/) |  String | empty
+|No |newVersionIncrement | Controls which part of the version gets incremented when newVersion is set.  Can be one of PATCH, MINOR or MAJOR.   |  String | PATCH
 |Yes |pushRelease | A flag indicating whether or not the finished release should be pushed to remote |  boolean | true
 |No |scmMessagePrefix| You can optionally supply a SCM Prefix. | String| empty
 |No |scmMessageSuffix| You can optionally supply a SCM Suffix. | String| empty
@@ -133,6 +134,7 @@ The tasks should be invoked via a command line.
 The tasks should be invoked via a command line.
 
 `gradlew releaseFinish`
+`gradlew releaseFinish -PnewVersionIncrement=PATCH`
 `gradlew releaseFinish -PreleaseVersion=1.0.0`
 `gradlew releaseFinish -PreleaseVersion=1.0.0 -PnewVersion=1.0.1-SNAPSHOT`
 `gradlew releaseFinish -PreleaseVersion=1.0.0 -PnewVersion=1.0.1-SNAPSHOT -PpushRelease=true`

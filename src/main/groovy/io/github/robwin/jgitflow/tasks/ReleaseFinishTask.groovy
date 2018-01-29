@@ -29,10 +29,13 @@ import static io.github.robwin.jgitflow.tasks.helper.GitHelper.updateGradlePrope
 
 class ReleaseFinishTask extends AbstractCommandTask {
 
+    String DEFAULT_NEW_VERSION_INCREMENT = "PATCH"
+
     @TaskAction
     void finish(){
+        String newVersionIncrement = project.properties['newVersionIncrement'] ?: DEFAULT_NEW_VERSION_INCREMENT;
         String releaseVersion = project.properties['releaseVersion']?:loadVersionFromGradleProperties()
-        String newVersion = project.properties['newVersion']?:ArtifactHelper.newSnapshotVersion(releaseVersion)
+        String newVersion = project.properties['newVersion']?:ArtifactHelper.newSnapshotVersion(releaseVersion, newVersionIncrement)
         boolean pushRelease = true
         if (project.properties.containsKey('pushRelease')) {
             pushRelease = Boolean.valueOf(project.property('pushRelease') as String)
