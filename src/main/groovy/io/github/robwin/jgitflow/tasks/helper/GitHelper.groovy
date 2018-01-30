@@ -18,6 +18,7 @@
  */
 package io.github.robwin.jgitflow.tasks.helper
 
+import org.apache.tools.ant.BuildException
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.LogCommand
 import org.eclipse.jgit.api.Status
@@ -100,7 +101,11 @@ class GitHelper {
         if (!propertiesFile.file) {
             propertiesFile.append("version=${version}")
         }else {
-            project.ant.replace(file: propertiesFile, token: "version=${currentVersion}", value: "version=${version}", failOnNoReplacements: true)
+            try {
+                project.ant.replace(file: propertiesFile, token: "version=${currentVersion}", value: "version=${version}", failOnNoReplacements: true)
+            } catch (BuildException e) {
+                throw new GradleException("Failed to update version in ${Project.GRADLE_PROPERTIES}.  Check the property exists and is formatted correctly.")
+            }
         }
     }
 
