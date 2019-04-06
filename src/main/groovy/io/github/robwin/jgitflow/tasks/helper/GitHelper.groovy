@@ -102,8 +102,11 @@ class GitHelper {
             propertiesFile.append("version=${version}")
         }else {
             try {
-                project.ant.replace(file: propertiesFile, token: "version=${currentVersion}", value: "version=${version}", failOnNoReplacements: true)
-            } catch (BuildException e) {
+				Properties props = new Properties()
+				props.load(propertiesFile.newDataInputStream())
+				props.setProperty('version', version)
+				props.store(propertiesFile.newWriter(), null)
+            } catch (IOException|IllegalArgumentException|ClassCastException|NullPointerException e) {
                 throw new GradleException("Failed to update version in ${Project.GRADLE_PROPERTIES}.  Check the property exists and is formatted correctly.")
             }
         }
